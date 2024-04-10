@@ -3,37 +3,191 @@
 
 openapi: 3.0.3
 info:
-    title: Greeter API
-    description: The greeting service definition.
+    title: Stream API
     version: 0.0.1
 paths:
-    /helloworld/{name}:
-        get:
+    /stream/receive:
+        post:
             tags:
-                - Greeter
-                - subgroup
-            description: Sends a greeting
-            operationId: Greeter_SayHello
-            parameters:
-                - name: name
-                  in: path
-                  required: true
-                  schema:
-                    type: string
+                - Stream
+            operationId: Stream_Receive
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.moralis.v1.ReceiveRequest'
+                required: true
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/helloworld.v1.HelloReply'
+                                $ref: '#/components/schemas/api.moralis.v1.ReceiveReply'
 components:
     schemas:
-        helloworld.v1.HelloReply:
+        api.moralis.v1.Abi:
             type: object
             properties:
-                message:
+                inputs:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.moralis.v1.Inputs'
+                name:
                     type: string
-            description: The response message containing the greetings
+                anonymous:
+                    type: boolean
+                type:
+                    type: string
+        api.moralis.v1.Block:
+            type: object
+            properties:
+                number:
+                    type: string
+                hash:
+                    type: string
+                timestamp:
+                    type: string
+        api.moralis.v1.Inputs:
+            type: object
+            properties:
+                indexed:
+                    type: boolean
+                name:
+                    type: string
+                internalType:
+                    type: string
+                type:
+                    type: string
+        api.moralis.v1.Logs:
+            type: object
+            properties:
+                topic1:
+                    type: string
+                topic2:
+                    type: string
+                logIndex:
+                    type: string
+                address:
+                    type: string
+                topic0:
+                    type: string
+                data:
+                    type: string
+                topic3:
+                    type: string
+                transactionHash:
+                    type: string
+        api.moralis.v1.NftApprovals:
+            type: object
+            properties:
+                ERC721:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/google.protobuf.Any'
+                ERC1155:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/google.protobuf.Any'
+        api.moralis.v1.ReceiveReply:
+            type: object
+            properties: {}
+        api.moralis.v1.ReceiveRequest:
+            type: object
+            properties:
+                nftApprovals:
+                    $ref: '#/components/schemas/api.moralis.v1.NftApprovals'
+                streamId:
+                    type: string
+                nftTransfers:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/google.protobuf.Any'
+                abi:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.moralis.v1.Abi'
+                txsInternal:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/google.protobuf.Any'
+                erc20Approvals:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/google.protobuf.Any'
+                confirmed:
+                    type: boolean
+                txs:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.moralis.v1.Txs'
+                retries:
+                    type: integer
+                    format: int32
+                nftTokenApprovals:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/google.protobuf.Any'
+                chainId:
+                    type: string
+                nativeBalances:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/google.protobuf.Any'
+                erc20Transfers:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/google.protobuf.Any'
+                block:
+                    $ref: '#/components/schemas/api.moralis.v1.Block'
+                tag:
+                    type: string
+                logs:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.moralis.v1.Logs'
+        api.moralis.v1.Txs:
+            type: object
+            properties:
+                receiptGasUsed:
+                    type: string
+                transactionIndex:
+                    type: string
+                type:
+                    type: string
+                nonce:
+                    type: string
+                toAddress:
+                    type: string
+                input:
+                    type: string
+                r:
+                    type: string
+                s:
+                    type: string
+                receiptCumulativeGasUsed:
+                    type: string
+                v:
+                    type: string
+                gas:
+                    type: string
+                fromAddress:
+                    type: string
+                value:
+                    type: string
+                hash:
+                    type: string
+                receiptStatus:
+                    type: string
+                gasPrice:
+                    type: string
+        google.protobuf.Any:
+            type: object
+            properties:
+                '@type':
+                    type: string
+                    description: The type of the serialized message.
+            additionalProperties: true
+            description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
 tags:
-    - name: Greeter
+    - name: Stream

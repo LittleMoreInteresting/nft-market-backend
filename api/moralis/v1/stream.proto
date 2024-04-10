@@ -1,0 +1,92 @@
+syntax = "proto3";
+
+package api.moralis.v1;
+
+option go_package = "nft-market-backend/api/moralis/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.moralis.v1";
+import "google/protobuf/any.proto";
+import "google/api/annotations.proto";
+service Stream {
+	rpc Receive (ReceiveRequest) returns (ReceiveReply){
+		option (google.api.http) = {
+			post: "/stream/receive",
+			body: "*",
+		};
+	}
+}
+
+message ReceiveReply{}
+message ReceiveRequest {
+	NftApprovals nftApprovals = 1;
+	string streamId = 2;
+	repeated google.protobuf.Any nftTransfers = 3;
+	repeated Abi abi = 4;
+	repeated google.protobuf.Any txsInternal = 5;
+	repeated google.protobuf.Any erc20Approvals = 6;
+	bool confirmed = 7;
+	repeated Txs txs = 8;
+	int32 retries = 9;
+	repeated google.protobuf.Any nftTokenApprovals = 10;
+	string chainId = 11;
+	repeated google.protobuf.Any nativeBalances = 12;
+	repeated google.protobuf.Any erc20Transfers = 13;
+	Block block = 14;
+	string tag = 15;
+	repeated Logs logs = 16;
+}
+
+message NftApprovals {
+	repeated google.protobuf.Any ERC721 = 1;
+	repeated google.protobuf.Any ERC1155 = 2;
+}
+
+message Abi {
+	repeated Inputs inputs = 1;
+	string name = 2;
+	bool anonymous = 3;
+	string type = 4;
+}
+
+message Inputs {
+	bool indexed = 1;
+	string name = 2;
+	string internalType = 3;
+	string type = 4;
+}
+
+message Txs {
+	string receiptGasUsed = 1;
+	string transactionIndex = 2;
+	string type = 3;
+	string nonce = 4;
+	string toAddress = 5;
+	string input = 6;
+	string r = 7;
+	string s = 8;
+	string receiptCumulativeGasUsed = 9;
+	string v = 10;
+	string gas = 11;
+	string fromAddress = 12;
+	string value = 13;
+	string hash = 14;
+	string receiptStatus = 15;
+	string gasPrice = 16;
+}
+
+message Block {
+	string number = 1;
+	string hash = 2;
+	string timestamp = 3;
+}
+
+message Logs {
+	string topic1 = 1;
+	string topic2 = 2;
+	string logIndex = 3;
+	string address = 4;
+	string topic0 = 5;
+	string data = 6;
+	string topic3 = 7;
+	string transactionHash = 8;
+}

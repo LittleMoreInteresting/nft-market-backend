@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package api.nftmarket.v1;
+
+option go_package = "nft-market-backend/api/nftmarket/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.nftmarket.v1";
+
+service Nftmarket {
+	rpc CreateNftmarket (CreateNftmarketRequest) returns (CreateNftmarketReply);
+	rpc UpdateNftmarket (UpdateNftmarketRequest) returns (UpdateNftmarketReply);
+	rpc DeleteNftmarket (DeleteNftmarketRequest) returns (DeleteNftmarketReply);
+	rpc GetNftmarket (GetNftmarketRequest) returns (GetNftmarketReply);
+	rpc ListNftmarket (ListNftmarketRequest) returns (ListNftmarketReply);
+}
+
+message CreateNftmarketRequest {}
+message CreateNftmarketReply {}
+
+message UpdateNftmarketRequest {}
+message UpdateNftmarketReply {}
+
+message DeleteNftmarketRequest {}
+message DeleteNftmarketReply {}
+
+message GetNftmarketRequest {}
+message GetNftmarketReply {}
+
+message ListNftmarketRequest {}
+message ListNftmarketReply {}
