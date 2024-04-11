@@ -1,19 +1,19 @@
 #!/bin/bash
 
 git pull;
-make build;
 VERSION=$(git describe --tags --always)
-if [ ! -f "version" ]; then
+if [ ! -f "version.out" ]; then
     echo "version file not found. Creating a new one."
-    echo "0.0.0" >> version.out
-    exit 0
+    echo "0.0.0" > version.out
 fi
 local_version=$(cat version)
 if [ "$local_version" == "$VERSION" ]; then
+    echo "new version not found."
     exit 0
 else
-    echo "$VERSION" >> version.out
+    echo "$VERSION" > version.out
 fi
+make build;
 
 go_id=`ps -ef|grep "./bin/nft-market-backend -conf" |grep -v "grep" | awk '{print $2}'`
 if [ -z "$go_id" ];
