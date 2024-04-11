@@ -90,3 +90,23 @@ message Logs {
 	string topic3 = 7;
 	string transactionHash = 8;
 }
+
+/**
+{13 items
+"operator":NULL
+"from":"0x0000000000000000000000000000000000000000"
+"to":"0x80f6783a48babd439fb35c6a65f525f2898ffc2b"
+"tokenId":"1"
+"amount":"1"
+"transactionHash":"0x2f390357d88a5010df857e8e439433cdcd1ebfc8..."
+"logIndex":"240"
+"contract":"0x2461c39a6378f44ae80230916c70162bd65bddf3"
+"triggered_by":[1 item
+0:"0x2461c39a6378f44ae80230916c70162bd65bddf3"
+]
+"tokenName":"Horace"
+"tokenSymbol":"HOR"
+"tokenContractType":"ERC721"
+"possibleSpam":false
+}
+ */

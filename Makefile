@@ -43,6 +43,12 @@ api:
  	       --go-grpc_out=paths=source_relative:./api \
 	       --openapi_out=fq_schema_naming=true,default_response=false:. \
 	       $(API_PROTO_FILES)
+.PHONY: abi
+# generate abi
+abi:
+	abigen --abi=abi/HoraceNFTMarket.abi --pkg=contracts --type=HoraceNFTMarket --out=abi/HoraceNFTMarket.go
+	abigen --abi=abi/HoraceNFT.abi --pkg=contracts --type=HoraceNFT --out=abi/HoraceNFT.go
+
 
 .PHONY: build
 # build

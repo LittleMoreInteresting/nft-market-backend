@@ -31,8 +31,8 @@ message Data {
     string username = 2;
     string password = 3;
     string db = 4;
-    string minPoolSize = 5;
-    string maxPoolSize = 6;
+    int64 minPoolSize = 5;
+    int64 maxPoolSize = 6;
   }
   message Redis {
     string network = 1;

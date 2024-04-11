@@ -9,10 +9,10 @@ data:
   database:
     driver: mysql
     source: root:root@tcp(127.0.0.1:3306)/test?parseTime=True&loc=Local
-  mongo:
-    url: mongodb://192.168.2.128:27018
-    username: MarketPlace
-    password: 12qwaszx
+  mongodb:
+    url: mongodb://117.72.12.178:27017
+    username: root
+    password: root123456
     minPoolSize: 10
     maxPoolSize: 100
     db: MarketPlace
