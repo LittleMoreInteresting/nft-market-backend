@@ -6,7 +6,7 @@ if [ ! -f "version.out" ]; then
     echo "version file not found. Creating a new one."
     echo "0.0.0" > version.out
 fi
-local_version=$(cat version)
+local_version=$(cat version.out)
 if [ "$local_version" == "$VERSION" ]; then
     echo "new version not found."
     exit 0
