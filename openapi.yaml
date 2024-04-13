@@ -12,7 +12,7 @@ paths:
                 - Nftmarket
             operationId: Nftmarket_ListedPage
             parameters:
-                - name: Page
+                - name: page
                   in: query
                   schema:
                     type: string
