@@ -11,6 +11,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/transport/http"
+	"github.com/gorilla/handlers"
 )
 
 // NewHTTPServer new an HTTP server.
@@ -34,6 +35,10 @@ func NewHTTPServer(c *conf.Server,
 	if c.Http.Timeout != nil {
 		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
+	opts = append(opts, http.Filter(handlers.CORS(
+		handlers.AllowedOrigins([]string{"*"}),
+		handlers.AllowedMethods([]string{"GET", "POST"}),
+	)))
 	srv := http.NewServer(opts...)
 	mv1.RegisterStreamHTTPServer(srv, stream)
 	nftv1.RegisterNftmarketHTTPServer(srv, nft)

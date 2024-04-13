@@ -7,6 +7,7 @@ require (
 	github.com/ethereum/go-ethereum v1.13.14
 	github.com/go-kratos/kratos/v2 v2.7.2
 	github.com/google/wire v0.6.0
+	github.com/gorilla/handlers v1.5.2
 	github.com/jinzhu/copier v0.4.0
 	go.mongodb.org/mongo-driver v1.14.0
 	go.uber.org/automaxprocs v1.5.2
@@ -26,6 +27,7 @@ require (
 	github.com/deckarep/golang-set/v2 v2.1.0 // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.0.1 // indirect
 	github.com/ethereum/c-kzg-4844 v0.4.0 // indirect
+	github.com/felixge/httpsnoop v1.0.3 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/go-kratos/aegis v0.2.0 // indirect
 	github.com/go-logr/logr v1.2.4 // indirect
