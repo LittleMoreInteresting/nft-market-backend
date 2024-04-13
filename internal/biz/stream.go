@@ -24,6 +24,24 @@ type EventListed struct {
 	ListedTime         int64
 	UpdateTime         int64
 }
+type EventBought struct {
+	Id                 string
+	ChainId            string
+	MarketPlaceAddress string
+	Buyer              string
+	NftAddress         string
+	TokenId            string
+	Price              string
+}
+type EventCancel struct {
+	Id                 string
+	ChainId            string
+	MarketPlaceAddress string
+	Seller             string
+	NftAddress         string
+	TokenId            string
+	Price              string
+}
 type EventQuery struct {
 	ChainId    string
 	NftAddress string
@@ -31,8 +49,13 @@ type EventQuery struct {
 }
 
 type StreamRepo interface {
-	FindOne(ctx context.Context, event *EventQuery) (*EventListed, bool, error)
+	FindOneListed(ctx context.Context, event *EventQuery) (*EventListed, bool, error)
 	SaveListed(ctx context.Context, event *EventListed) error
+	RemoveListed(ctx context.Context, event *EventQuery) error
+	FindOneBought(ctx context.Context, event *EventQuery) (*EventBought, bool, error)
+	SaveBought(ctx context.Context, event *EventBought) error
+	FindOneCancel(ctx context.Context, event *EventQuery) (*EventCancel, bool, error)
+	SaveCancel(ctx context.Context, event *EventCancel) error
 }
 
 type StreamUseCase struct {
@@ -87,11 +110,9 @@ func (uc *StreamUseCase) Receive(ctx context.Context, req *v1.ReceiveRequest) er
 				NftAddress:         nftListed.NftAddress.Hex(),
 				TokenId:            nftListed.TokenId.String(),
 				Price:              nftListed.Price.String(),
-				OldPrice:           nftListed.OldPrice.String(),
-				ListedTime:         time.Now().Unix(),
 			}
 			// list
-			list, exist, err := uc.repo.FindOne(ctx, &EventQuery{
+			list, exist, err := uc.repo.FindOneListed(ctx, &EventQuery{
 				ChainId:    eventList.ChainId,
 				NftAddress: eventList.NftAddress,
 				TokenId:    eventList.TokenId,
@@ -101,16 +122,87 @@ func (uc *StreamUseCase) Receive(ctx context.Context, req *v1.ReceiveRequest) er
 			}
 			if exist {
 				// update
-				uc.log.Info("update")
 				eventList.Id = list.Id
 				eventList.UpdateTime = time.Now().Unix()
 			}
-			return uc.repo.SaveListed(ctx, eventList)
-
+			err = uc.repo.SaveListed(ctx, eventList)
+			if err != nil {
+				return err
+			}
 		case uc.abi.Events["BuyNFT"].ID.Hex():
 			// Buy
+			nftBought, err := uc.market.ParseBuyNFT(eventLog)
+			if err != nil {
+				return err
+			}
+			event := &EventBought{
+				ChainId:            chainId.String(),
+				MarketPlaceAddress: l.Address,
+				Buyer:              nftBought.Buyer.Hex(),
+				NftAddress:         nftBought.NftAddress.Hex(),
+				TokenId:            nftBought.TokenId.String(),
+				Price:              nftBought.Price.String(),
+			}
+			query := &EventQuery{
+				ChainId:    event.ChainId,
+				NftAddress: event.NftAddress,
+				TokenId:    event.TokenId,
+			}
+			bought, exist, err := uc.repo.FindOneBought(ctx, query)
+			if err != nil {
+				log.Error("FindOneBought error:", err)
+				return err
+			}
+			if exist {
+				event.Id = bought.Id
+			}
+			err = uc.repo.SaveBought(ctx, event)
+			if err != nil {
+				log.Error("SaveBought error:", err)
+				return err
+			}
+			err = uc.repo.RemoveListed(ctx, query)
+			if err != nil {
+				log.Error("SaveBought error:", err)
+				return err
+			}
+
 		case uc.abi.Events["CancelListing"].ID.Hex():
 			// cancel
+			cancel, err := uc.market.ParseCancelListing(eventLog)
+			if err != nil {
+				return err
+			}
+			event := &EventCancel{
+				ChainId:            chainId.String(),
+				MarketPlaceAddress: l.Address,
+				Seller:             cancel.Seller.Hex(),
+				NftAddress:         cancel.NftAddress.Hex(),
+				TokenId:            cancel.TokenId.String(),
+			}
+			query := &EventQuery{
+				ChainId:    event.ChainId,
+				NftAddress: event.NftAddress,
+				TokenId:    event.TokenId,
+			}
+			cancelList, exist, err := uc.repo.FindOneCancel(ctx, query)
+			if err != nil {
+				log.Error("FindOneCancel error:", err)
+				return err
+			}
+			if exist {
+				event.Id = cancelList.Id
+			}
+			err = uc.repo.SaveCancel(ctx, event)
+			if err != nil {
+				log.Error("SaveCancel error:", err)
+				return err
+			}
+			err = uc.repo.RemoveListed(ctx, query)
+			if err != nil {
+				log.Error("SaveCancel error:", err)
+				return err
+			}
 
 		}
 	}

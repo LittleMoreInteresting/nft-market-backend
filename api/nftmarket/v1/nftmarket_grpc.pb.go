@@ -19,22 +19,16 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Nftmarket_CreateNftmarket_FullMethodName = "/api.nftmarket.v1.Nftmarket/CreateNftmarket"
-	Nftmarket_UpdateNftmarket_FullMethodName = "/api.nftmarket.v1.Nftmarket/UpdateNftmarket"
-	Nftmarket_DeleteNftmarket_FullMethodName = "/api.nftmarket.v1.Nftmarket/DeleteNftmarket"
-	Nftmarket_GetNftmarket_FullMethodName    = "/api.nftmarket.v1.Nftmarket/GetNftmarket"
-	Nftmarket_ListNftmarket_FullMethodName   = "/api.nftmarket.v1.Nftmarket/ListNftmarket"
+	Nftmarket_GetNFTMetadata_FullMethodName = "/api.nftmarket.v1.Nftmarket/GetNFTMetadata"
+	Nftmarket_ListedPage_FullMethodName     = "/api.nftmarket.v1.Nftmarket/ListedPage"
 )
 
 // NftmarketClient is the client API for Nftmarket service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type NftmarketClient interface {
-	CreateNftmarket(ctx context.Context, in *CreateNftmarketRequest, opts ...grpc.CallOption) (*CreateNftmarketReply, error)
-	UpdateNftmarket(ctx context.Context, in *UpdateNftmarketRequest, opts ...grpc.CallOption) (*UpdateNftmarketReply, error)
-	DeleteNftmarket(ctx context.Context, in *DeleteNftmarketRequest, opts ...grpc.CallOption) (*DeleteNftmarketReply, error)
-	GetNftmarket(ctx context.Context, in *GetNftmarketRequest, opts ...grpc.CallOption) (*GetNftmarketReply, error)
-	ListNftmarket(ctx context.Context, in *ListNftmarketRequest, opts ...grpc.CallOption) (*ListNftmarketReply, error)
+	GetNFTMetadata(ctx context.Context, in *GetNFTMetadataRequest, opts ...grpc.CallOption) (*GetNFTMetadataReply, error)
+	ListedPage(ctx context.Context, in *ListedPageRequest, opts ...grpc.CallOption) (*ListedPageReply, error)
 }
 
 type nftmarketClient struct {
@@ -45,45 +39,18 @@ func NewNftmarketClient(cc grpc.ClientConnInterface) NftmarketClient {
 	return &nftmarketClient{cc}
 }
 
-func (c *nftmarketClient) CreateNftmarket(ctx context.Context, in *CreateNftmarketRequest, opts ...grpc.CallOption) (*CreateNftmarketReply, error) {
-	out := new(CreateNftmarketReply)
-	err := c.cc.Invoke(ctx, Nftmarket_CreateNftmarket_FullMethodName, in, out, opts...)
+func (c *nftmarketClient) GetNFTMetadata(ctx context.Context, in *GetNFTMetadataRequest, opts ...grpc.CallOption) (*GetNFTMetadataReply, error) {
+	out := new(GetNFTMetadataReply)
+	err := c.cc.Invoke(ctx, Nftmarket_GetNFTMetadata_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *nftmarketClient) UpdateNftmarket(ctx context.Context, in *UpdateNftmarketRequest, opts ...grpc.CallOption) (*UpdateNftmarketReply, error) {
-	out := new(UpdateNftmarketReply)
-	err := c.cc.Invoke(ctx, Nftmarket_UpdateNftmarket_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *nftmarketClient) DeleteNftmarket(ctx context.Context, in *DeleteNftmarketRequest, opts ...grpc.CallOption) (*DeleteNftmarketReply, error) {
-	out := new(DeleteNftmarketReply)
-	err := c.cc.Invoke(ctx, Nftmarket_DeleteNftmarket_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *nftmarketClient) GetNftmarket(ctx context.Context, in *GetNftmarketRequest, opts ...grpc.CallOption) (*GetNftmarketReply, error) {
-	out := new(GetNftmarketReply)
-	err := c.cc.Invoke(ctx, Nftmarket_GetNftmarket_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *nftmarketClient) ListNftmarket(ctx context.Context, in *ListNftmarketRequest, opts ...grpc.CallOption) (*ListNftmarketReply, error) {
-	out := new(ListNftmarketReply)
-	err := c.cc.Invoke(ctx, Nftmarket_ListNftmarket_FullMethodName, in, out, opts...)
+func (c *nftmarketClient) ListedPage(ctx context.Context, in *ListedPageRequest, opts ...grpc.CallOption) (*ListedPageReply, error) {
+	out := new(ListedPageReply)
+	err := c.cc.Invoke(ctx, Nftmarket_ListedPage_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -94,11 +61,8 @@ func (c *nftmarketClient) ListNftmarket(ctx context.Context, in *ListNftmarketRe
 // All implementations must embed UnimplementedNftmarketServer
 // for forward compatibility
 type NftmarketServer interface {
-	CreateNftmarket(context.Context, *CreateNftmarketRequest) (*CreateNftmarketReply, error)
-	UpdateNftmarket(context.Context, *UpdateNftmarketRequest) (*UpdateNftmarketReply, error)
-	DeleteNftmarket(context.Context, *DeleteNftmarketRequest) (*DeleteNftmarketReply, error)
-	GetNftmarket(context.Context, *GetNftmarketRequest) (*GetNftmarketReply, error)
-	ListNftmarket(context.Context, *ListNftmarketRequest) (*ListNftmarketReply, error)
+	GetNFTMetadata(context.Context, *GetNFTMetadataRequest) (*GetNFTMetadataReply, error)
+	ListedPage(context.Context, *ListedPageRequest) (*ListedPageReply, error)
 	mustEmbedUnimplementedNftmarketServer()
 }
 
@@ -106,20 +70,11 @@ type NftmarketServer interface {
 type UnimplementedNftmarketServer struct {
 }
 
-func (UnimplementedNftmarketServer) CreateNftmarket(context.Context, *CreateNftmarketRequest) (*CreateNftmarketReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateNftmarket not implemented")
+func (UnimplementedNftmarketServer) GetNFTMetadata(context.Context, *GetNFTMetadataRequest) (*GetNFTMetadataReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetNFTMetadata not implemented")
 }
-func (UnimplementedNftmarketServer) UpdateNftmarket(context.Context, *UpdateNftmarketRequest) (*UpdateNftmarketReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateNftmarket not implemented")
-}
-func (UnimplementedNftmarketServer) DeleteNftmarket(context.Context, *DeleteNftmarketRequest) (*DeleteNftmarketReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteNftmarket not implemented")
-}
-func (UnimplementedNftmarketServer) GetNftmarket(context.Context, *GetNftmarketRequest) (*GetNftmarketReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetNftmarket not implemented")
-}
-func (UnimplementedNftmarketServer) ListNftmarket(context.Context, *ListNftmarketRequest) (*ListNftmarketReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListNftmarket not implemented")
+func (UnimplementedNftmarketServer) ListedPage(context.Context, *ListedPageRequest) (*ListedPageReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListedPage not implemented")
 }
 func (UnimplementedNftmarketServer) mustEmbedUnimplementedNftmarketServer() {}
 
@@ -134,92 +89,38 @@ func RegisterNftmarketServer(s grpc.ServiceRegistrar, srv NftmarketServer) {
 	s.RegisterService(&Nftmarket_ServiceDesc, srv)
 }
 
-func _Nftmarket_CreateNftmarket_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateNftmarketRequest)
+func _Nftmarket_GetNFTMetadata_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetNFTMetadataRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(NftmarketServer).CreateNftmarket(ctx, in)
+		return srv.(NftmarketServer).GetNFTMetadata(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Nftmarket_CreateNftmarket_FullMethodName,
+		FullMethod: Nftmarket_GetNFTMetadata_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NftmarketServer).CreateNftmarket(ctx, req.(*CreateNftmarketRequest))
+		return srv.(NftmarketServer).GetNFTMetadata(ctx, req.(*GetNFTMetadataRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Nftmarket_UpdateNftmarket_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateNftmarketRequest)
+func _Nftmarket_ListedPage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListedPageRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(NftmarketServer).UpdateNftmarket(ctx, in)
+		return srv.(NftmarketServer).ListedPage(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Nftmarket_UpdateNftmarket_FullMethodName,
+		FullMethod: Nftmarket_ListedPage_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NftmarketServer).UpdateNftmarket(ctx, req.(*UpdateNftmarketRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Nftmarket_DeleteNftmarket_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteNftmarketRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(NftmarketServer).DeleteNftmarket(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Nftmarket_DeleteNftmarket_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NftmarketServer).DeleteNftmarket(ctx, req.(*DeleteNftmarketRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Nftmarket_GetNftmarket_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetNftmarketRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(NftmarketServer).GetNftmarket(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Nftmarket_GetNftmarket_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NftmarketServer).GetNftmarket(ctx, req.(*GetNftmarketRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Nftmarket_ListNftmarket_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListNftmarketRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(NftmarketServer).ListNftmarket(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Nftmarket_ListNftmarket_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NftmarketServer).ListNftmarket(ctx, req.(*ListNftmarketRequest))
+		return srv.(NftmarketServer).ListedPage(ctx, req.(*ListedPageRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -232,24 +133,12 @@ var Nftmarket_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*NftmarketServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CreateNftmarket",
-			Handler:    _Nftmarket_CreateNftmarket_Handler,
+			MethodName: "GetNFTMetadata",
+			Handler:    _Nftmarket_GetNFTMetadata_Handler,
 		},
 		{
-			MethodName: "UpdateNftmarket",
-			Handler:    _Nftmarket_UpdateNftmarket_Handler,
-		},
-		{
-			MethodName: "DeleteNftmarket",
-			Handler:    _Nftmarket_DeleteNftmarket_Handler,
-		},
-		{
-			MethodName: "GetNftmarket",
-			Handler:    _Nftmarket_GetNftmarket_Handler,
-		},
-		{
-			MethodName: "ListNftmarket",
-			Handler:    _Nftmarket_ListNftmarket_Handler,
+			MethodName: "ListedPage",
+			Handler:    _Nftmarket_ListedPage_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

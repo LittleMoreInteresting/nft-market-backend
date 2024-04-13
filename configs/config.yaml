@@ -20,3 +20,7 @@ data:
     addr: 127.0.0.1:6379
     read_timeout: 0.2s
     write_timeout: 0.2s
+
+moralis:
+  url: https://deep-index.moralis.io/api/v2.2/nft/
+  key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6Ijk4OTUwNzhhLWRjMjItNDE1MC05NmRlLTc2YmZmYzE1OGJjOCIsIm9yZ0lkIjoiMzg0NTg1IiwidXNlcklkIjoiMzk1MTU5IiwidHlwZUlkIjoiOTYyOGIwMzktMGZhOC00ZTM4LWE3OGUtZDgwNDBhYThiNjMzIiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE3MTEzNDgxMTEsImV4cCI6NDg2NzEwODExMX0.omhHgc-MeZxX3AQDFAQWGqG9lXLN0xMDnwxYBhC2lGk

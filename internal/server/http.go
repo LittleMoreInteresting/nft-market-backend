@@ -1,7 +1,10 @@
 package server
 
 import (
-	v1 "nft-market-backend/api/moralis/v1"
+	"github.com/go-kratos/kratos/v2/middleware/logging"
+	"github.com/go-kratos/kratos/v2/middleware/validate"
+	mv1 "nft-market-backend/api/moralis/v1"
+	nftv1 "nft-market-backend/api/nftmarket/v1"
 	"nft-market-backend/internal/conf"
 	"nft-market-backend/internal/service"
 
@@ -11,10 +14,15 @@ import (
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Server, stream *service.StreamService, logger log.Logger) *http.Server {
+func NewHTTPServer(c *conf.Server,
+	stream *service.StreamService,
+	nft *service.NftmarketService,
+	logger log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
+			logging.Server(logger),
+			validate.Validator(),
 		),
 	}
 	if c.Http.Network != "" {
@@ -27,6 +35,7 @@ func NewHTTPServer(c *conf.Server, stream *service.StreamService, logger log.Log
 		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
 	srv := http.NewServer(opts...)
-	v1.RegisterStreamHTTPServer(srv, stream)
+	mv1.RegisterStreamHTTPServer(srv, stream)
+	nftv1.RegisterNftmarketHTTPServer(srv, nft)
 	return srv
 }

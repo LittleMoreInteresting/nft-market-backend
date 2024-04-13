@@ -26,8 +26,9 @@ type Bootstrap struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Server *Server `protobuf:"bytes,1,opt,name=server,proto3" json:"server,omitempty"`
-	Data   *Data   `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
+	Server  *Server  `protobuf:"bytes,1,opt,name=server,proto3" json:"server,omitempty"`
+	Data    *Data    `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
+	Moralis *Moralis `protobuf:"bytes,3,opt,name=moralis,proto3" json:"moralis,omitempty"`
 }
 
 func (x *Bootstrap) Reset() {
@@ -72,6 +73,13 @@ func (x *Bootstrap) GetServer() *Server {
 func (x *Bootstrap) GetData() *Data {
 	if x != nil {
 		return x.Data
+	}
+	return nil
+}
+
+func (x *Bootstrap) GetMoralis() *Moralis {
+	if x != nil {
+		return x.Moralis
 	}
 	return nil
 }
@@ -183,6 +191,61 @@ func (x *Data) GetRedis() *Data_Redis {
 	return nil
 }
 
+type Moralis struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Url string `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
+	Key string `protobuf:"bytes,2,opt,name=key,proto3" json:"key,omitempty"`
+}
+
+func (x *Moralis) Reset() {
+	*x = Moralis{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_conf_conf_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Moralis) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Moralis) ProtoMessage() {}
+
+func (x *Moralis) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Moralis.ProtoReflect.Descriptor instead.
+func (*Moralis) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *Moralis) GetUrl() string {
+	if x != nil {
+		return x.Url
+	}
+	return ""
+}
+
+func (x *Moralis) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
 type Server_HTTP struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -196,7 +259,7 @@ type Server_HTTP struct {
 func (x *Server_HTTP) Reset() {
 	*x = Server_HTTP{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_conf_conf_proto_msgTypes[3]
+		mi := &file_conf_conf_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -209,7 +272,7 @@ func (x *Server_HTTP) String() string {
 func (*Server_HTTP) ProtoMessage() {}
 
 func (x *Server_HTTP) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[3]
+	mi := &file_conf_conf_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -262,7 +325,7 @@ type Data_Mongodb struct {
 func (x *Data_Mongodb) Reset() {
 	*x = Data_Mongodb{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_conf_conf_proto_msgTypes[4]
+		mi := &file_conf_conf_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -275,7 +338,7 @@ func (x *Data_Mongodb) String() string {
 func (*Data_Mongodb) ProtoMessage() {}
 
 func (x *Data_Mongodb) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[4]
+	mi := &file_conf_conf_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -347,7 +410,7 @@ type Data_Redis struct {
 func (x *Data_Redis) Reset() {
 	*x = Data_Redis{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_conf_conf_proto_msgTypes[5]
+		mi := &file_conf_conf_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -360,7 +423,7 @@ func (x *Data_Redis) String() string {
 func (*Data_Redis) ProtoMessage() {}
 
 func (x *Data_Redis) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[5]
+	mi := &file_conf_conf_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -410,13 +473,16 @@ var file_conf_conf_proto_rawDesc = []byte{
 	0x0a, 0x0f, 0x63, 0x6f, 0x6e, 0x66, 0x2f, 0x63, 0x6f, 0x6e, 0x66, 0x2e, 0x70, 0x72, 0x6f, 0x74,
 	0x6f, 0x12, 0x0a, 0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x1a, 0x1e, 0x67,
 	0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x64,
-	0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x5d, 0x0a,
-	0x09, 0x42, 0x6f, 0x6f, 0x74, 0x73, 0x74, 0x72, 0x61, 0x70, 0x12, 0x2a, 0x0a, 0x06, 0x73, 0x65,
-	0x72, 0x76, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x12, 0x2e, 0x6b, 0x72, 0x61,
-	0x74, 0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x52, 0x06,
-	0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x12, 0x24, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x10, 0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e, 0x61, 0x70,
-	0x69, 0x2e, 0x44, 0x61, 0x74, 0x61, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0xa0, 0x01, 0x0a,
+	0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x8c, 0x01,
+	0x0a, 0x09, 0x42, 0x6f, 0x6f, 0x74, 0x73, 0x74, 0x72, 0x61, 0x70, 0x12, 0x2a, 0x0a, 0x06, 0x73,
+	0x65, 0x72, 0x76, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x12, 0x2e, 0x6b, 0x72,
+	0x61, 0x74, 0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x52,
+	0x06, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x12, 0x24, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x10, 0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e, 0x61,
+	0x70, 0x69, 0x2e, 0x44, 0x61, 0x74, 0x61, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x12, 0x2d, 0x0a,
+	0x07, 0x6d, 0x6f, 0x72, 0x61, 0x6c, 0x69, 0x73, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x13,
+	0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x4d, 0x6f, 0x72, 0x61,
+	0x6c, 0x69, 0x73, 0x52, 0x07, 0x6d, 0x6f, 0x72, 0x61, 0x6c, 0x69, 0x73, 0x22, 0xa0, 0x01, 0x0a,
 	0x06, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x12, 0x2b, 0x0a, 0x04, 0x68, 0x74, 0x74, 0x70, 0x18,
 	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x17, 0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e, 0x61,
 	0x70, 0x69, 0x2e, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2e, 0x48, 0x54, 0x54, 0x50, 0x52, 0x04,
@@ -455,10 +521,13 @@ var file_conf_conf_proto_rawDesc = []byte{
 	0x69, 0x74, 0x65, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28,
 	0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
 	0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x0c, 0x77, 0x72,
-	0x69, 0x74, 0x65, 0x54, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x42, 0x27, 0x5a, 0x25, 0x6e, 0x66,
-	0x74, 0x2d, 0x6d, 0x61, 0x72, 0x6b, 0x65, 0x74, 0x2d, 0x62, 0x61, 0x63, 0x6b, 0x65, 0x6e, 0x64,
-	0x2f, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x6e, 0x61, 0x6c, 0x2f, 0x63, 0x6f, 0x6e, 0x66, 0x3b, 0x63,
-	0x6f, 0x6e, 0x66, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x69, 0x74, 0x65, 0x54, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x22, 0x2d, 0x0a, 0x07, 0x4d, 0x6f,
+	0x72, 0x61, 0x6c, 0x69, 0x73, 0x12, 0x10, 0x0a, 0x03, 0x75, 0x72, 0x6c, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x03, 0x75, 0x72, 0x6c, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x42, 0x27, 0x5a, 0x25, 0x6e, 0x66, 0x74,
+	0x2d, 0x6d, 0x61, 0x72, 0x6b, 0x65, 0x74, 0x2d, 0x62, 0x61, 0x63, 0x6b, 0x65, 0x6e, 0x64, 0x2f,
+	0x69, 0x6e, 0x74, 0x65, 0x72, 0x6e, 0x61, 0x6c, 0x2f, 0x63, 0x6f, 0x6e, 0x66, 0x3b, 0x63, 0x6f,
+	0x6e, 0x66, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -473,30 +542,32 @@ func file_conf_conf_proto_rawDescGZIP() []byte {
 	return file_conf_conf_proto_rawDescData
 }
 
-var file_conf_conf_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_conf_conf_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_conf_conf_proto_goTypes = []interface{}{
 	(*Bootstrap)(nil),           // 0: kratos.api.Bootstrap
 	(*Server)(nil),              // 1: kratos.api.Server
 	(*Data)(nil),                // 2: kratos.api.Data
-	(*Server_HTTP)(nil),         // 3: kratos.api.Server.HTTP
-	(*Data_Mongodb)(nil),        // 4: kratos.api.Data.Mongodb
-	(*Data_Redis)(nil),          // 5: kratos.api.Data.Redis
-	(*durationpb.Duration)(nil), // 6: google.protobuf.Duration
+	(*Moralis)(nil),             // 3: kratos.api.Moralis
+	(*Server_HTTP)(nil),         // 4: kratos.api.Server.HTTP
+	(*Data_Mongodb)(nil),        // 5: kratos.api.Data.Mongodb
+	(*Data_Redis)(nil),          // 6: kratos.api.Data.Redis
+	(*durationpb.Duration)(nil), // 7: google.protobuf.Duration
 }
 var file_conf_conf_proto_depIdxs = []int32{
 	1, // 0: kratos.api.Bootstrap.server:type_name -> kratos.api.Server
 	2, // 1: kratos.api.Bootstrap.data:type_name -> kratos.api.Data
-	3, // 2: kratos.api.Server.http:type_name -> kratos.api.Server.HTTP
-	4, // 3: kratos.api.Data.mongodb:type_name -> kratos.api.Data.Mongodb
-	5, // 4: kratos.api.Data.redis:type_name -> kratos.api.Data.Redis
-	6, // 5: kratos.api.Server.HTTP.timeout:type_name -> google.protobuf.Duration
-	6, // 6: kratos.api.Data.Redis.read_timeout:type_name -> google.protobuf.Duration
-	6, // 7: kratos.api.Data.Redis.write_timeout:type_name -> google.protobuf.Duration
-	8, // [8:8] is the sub-list for method output_type
-	8, // [8:8] is the sub-list for method input_type
-	8, // [8:8] is the sub-list for extension type_name
-	8, // [8:8] is the sub-list for extension extendee
-	0, // [0:8] is the sub-list for field type_name
+	3, // 2: kratos.api.Bootstrap.moralis:type_name -> kratos.api.Moralis
+	4, // 3: kratos.api.Server.http:type_name -> kratos.api.Server.HTTP
+	5, // 4: kratos.api.Data.mongodb:type_name -> kratos.api.Data.Mongodb
+	6, // 5: kratos.api.Data.redis:type_name -> kratos.api.Data.Redis
+	7, // 6: kratos.api.Server.HTTP.timeout:type_name -> google.protobuf.Duration
+	7, // 7: kratos.api.Data.Redis.read_timeout:type_name -> google.protobuf.Duration
+	7, // 8: kratos.api.Data.Redis.write_timeout:type_name -> google.protobuf.Duration
+	9, // [9:9] is the sub-list for method output_type
+	9, // [9:9] is the sub-list for method input_type
+	9, // [9:9] is the sub-list for extension type_name
+	9, // [9:9] is the sub-list for extension extendee
+	0, // [0:9] is the sub-list for field type_name
 }
 
 func init() { file_conf_conf_proto_init() }
@@ -542,7 +613,7 @@ func file_conf_conf_proto_init() {
 			}
 		}
 		file_conf_conf_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Server_HTTP); i {
+			switch v := v.(*Moralis); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -554,7 +625,7 @@ func file_conf_conf_proto_init() {
 			}
 		}
 		file_conf_conf_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Data_Mongodb); i {
+			switch v := v.(*Server_HTTP); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -566,6 +637,18 @@ func file_conf_conf_proto_init() {
 			}
 		}
 		file_conf_conf_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Data_Mongodb); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_conf_conf_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Data_Redis); i {
 			case 0:
 				return &v.state
@@ -584,7 +667,7 @@ func file_conf_conf_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_conf_conf_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

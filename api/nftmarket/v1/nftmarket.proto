@@ -5,26 +5,51 @@ package api.nftmarket.v1;
 option go_package = "nft-market-backend/api/nftmarket/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.nftmarket.v1";
-
+import "google/api/annotations.proto";
+import "google/protobuf/struct.proto";
+import "validate/validate.proto";
 service Nftmarket {
-	rpc CreateNftmarket (CreateNftmarketRequest) returns (CreateNftmarketReply);
-	rpc UpdateNftmarket (UpdateNftmarketRequest) returns (UpdateNftmarketReply);
-	rpc DeleteNftmarket (DeleteNftmarketRequest) returns (DeleteNftmarketReply);
-	rpc GetNftmarket (GetNftmarketRequest) returns (GetNftmarketReply);
-	rpc ListNftmarket (ListNftmarketRequest) returns (ListNftmarketReply);
+	rpc GetNFTMetadata (GetNFTMetadataRequest) returns (GetNFTMetadataReply){
+		option (google.api.http) = {
+			get: "/nft/metaData/getNFTMetadata",
+		};
+	}
+	rpc ListedPage (ListedPageRequest) returns (ListedPageReply){
+		option (google.api.http) = {
+			get: "/nft/listed/listedPage",
+		};
+	}
 }
 
-message CreateNftmarketRequest {}
-message CreateNftmarketReply {}
+message GetNFTMetadataRequest {
+		string nftAddress = 1 [(validate.rules).string = {min_len: 1}];
+		string tokenId = 2 [(validate.rules).string = {min_len: 1}];
+		string chainId = 3 [(validate.rules).string = {min_len: 1}];
+}
+message GetNFTMetadataReply {
+	int32 code = 1;
+	google.protobuf.Struct data = 2;
+	string msg = 3;
+}
 
-message UpdateNftmarketRequest {}
-message UpdateNftmarketReply {}
+message ListedPageRequest {
+	int64 Page = 1 [(validate.rules).int64 = {gt: 0}];
+	int64 pageSize = 2 [(validate.rules).int64 = {gt: 0}];;
+}
 
-message DeleteNftmarketRequest {}
-message DeleteNftmarketReply {}
-
-message GetNftmarketRequest {}
-message GetNftmarketReply {}
-
-message ListNftmarketRequest {}
-message ListNftmarketReply {}
+message ListedPageReply {
+	message NftItem {
+		string id =1;
+		string chainId = 2;
+		string marketPlaceAddress = 3;
+		string seller = 4;
+		string nftAddress = 5;
+		string tokenId = 6;
+		string price = 7;
+		int64 listedTime = 8;
+		int64 updateTime = 9;
+	}
+	int32 code = 1;
+	repeated NftItem data = 2;
+	string msg = 3;
+}

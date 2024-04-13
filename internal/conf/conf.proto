@@ -8,6 +8,7 @@ import "google/protobuf/duration.proto";
 message Bootstrap {
   Server server = 1;
   Data data = 2;
+  Moralis moralis = 3;
 }
 
 message Server {
@@ -42,4 +43,9 @@ message Data {
   }
   Mongodb mongodb = 1;
   Redis redis = 2;
+}
+
+message Moralis {
+  string url = 1;
+  string key = 2;
 }

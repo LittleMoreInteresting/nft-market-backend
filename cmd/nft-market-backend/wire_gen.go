@@ -23,7 +23,7 @@ import (
 // Injectors from wire.go:
 
 // wireApp init kratos application.
-func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
+func wireApp(confServer *conf.Server, confData *conf.Data, moralis *conf.Moralis, logger log.Logger) (*kratos.App, func(), error) {
 	dataData, cleanup, err := data.NewData(confData, logger)
 	if err != nil {
 		return nil, nil, err
@@ -31,7 +31,10 @@ func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*
 	streamRepo := data.NewStreamRepo(dataData, logger)
 	streamUseCase := biz.NewStreamUseCase(streamRepo, logger)
 	streamService := service.NewStreamService(logger, streamUseCase)
-	httpServer := server.NewHTTPServer(confServer, streamService, logger)
+	marketRepo := data.NewMarketRepo(dataData, logger)
+	marketUseCase := biz.NewMarketUseCase(logger, marketRepo, moralis)
+	nftmarketService := service.NewNftmarketService(logger, marketUseCase)
+	httpServer := server.NewHTTPServer(confServer, streamService, nftmarketService, logger)
 	app := newApp(logger, httpServer)
 	return app, func() {
 		cleanup()

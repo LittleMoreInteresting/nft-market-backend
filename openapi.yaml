@@ -3,9 +3,55 @@
 
 openapi: 3.0.3
 info:
-    title: Stream API
+    title: ""
     version: 0.0.1
 paths:
+    /nft/listed/listedPage:
+        get:
+            tags:
+                - Nftmarket
+            operationId: Nftmarket_ListedPage
+            parameters:
+                - name: Page
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.nftmarket.v1.ListedPageReply'
+    /nft/metaData/getNFTMetadata:
+        get:
+            tags:
+                - Nftmarket
+            operationId: Nftmarket_GetNFTMetadata
+            parameters:
+                - name: nftAddress
+                  in: query
+                  schema:
+                    type: string
+                - name: tokenId
+                  in: query
+                  schema:
+                    type: string
+                - name: chainId
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.nftmarket.v1.GetNFTMetadataReply'
     /stream/receive:
         post:
             tags:
@@ -181,6 +227,49 @@ components:
                     type: string
                 gasPrice:
                     type: string
+        api.nftmarket.v1.GetNFTMetadataReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                data:
+                    type: object
+                msg:
+                    type: string
+        api.nftmarket.v1.ListedPageReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.nftmarket.v1.ListedPageReply_NftItem'
+                msg:
+                    type: string
+        api.nftmarket.v1.ListedPageReply_NftItem:
+            type: object
+            properties:
+                id:
+                    type: string
+                chainId:
+                    type: string
+                marketPlaceAddress:
+                    type: string
+                seller:
+                    type: string
+                nftAddress:
+                    type: string
+                tokenId:
+                    type: string
+                price:
+                    type: string
+                listedTime:
+                    type: string
+                updateTime:
+                    type: string
         google.protobuf.Any:
             type: object
             properties:
@@ -190,4 +279,5 @@ components:
             additionalProperties: true
             description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
 tags:
+    - name: Nftmarket
     - name: Stream
