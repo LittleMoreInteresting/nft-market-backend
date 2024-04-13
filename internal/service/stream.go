@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"encoding/json"
 	"github.com/go-kratos/kratos/v2/log"
 	"nft-market-backend/internal/biz"
 
@@ -27,8 +26,6 @@ func (s *StreamService) Receive(ctx context.Context, req *pb.ReceiveRequest) (*p
 		// 确认
 		return &pb.ReceiveReply{}, nil
 	}*/
-	marshal, _ := json.Marshal(req)
-	s.log.Info(string(marshal))
 	err := s.stream.Receive(ctx, req)
 	return &pb.ReceiveReply{}, err
 }
