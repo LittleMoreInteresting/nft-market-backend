@@ -78,10 +78,6 @@ func NewStreamUseCase(repo StreamRepo, logger log.Logger) *StreamUseCase {
 }
 
 func (uc *StreamUseCase) Receive(ctx context.Context, req *v1.ReceiveRequest) error {
-	if req.Confirmed {
-		// 确认
-		return nil
-	}
 	chainId, _ := hexutil.DecodeBig(req.ChainId)
 	logs := req.Logs
 	for _, l := range logs {

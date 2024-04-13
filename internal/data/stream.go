@@ -33,6 +33,7 @@ func (s *StreamRepo) SaveListed(ctx context.Context, event *biz.EventListed) err
 		return err
 	}
 	if event.Id == "" { // Insert
+		listed.ListedTime = time.Now().Unix()
 		_, err = db.InsertOne(ctx, listed)
 		return err
 	}
