@@ -167,7 +167,7 @@ func (s *StreamRepo) SaveNftTransfer(ctx context.Context, event *biz.EventTransf
 }
 
 func (s *StreamRepo) FindOneTransfer(ctx context.Context, event *biz.EventQuery) (*biz.EventTransfer, bool, error) {
-	listed := &entity.NftCanceled{}
+	listed := &entity.NftTransfer{}
 	b, err := s.findOneEntity(ctx, listed, event)
 	if err != nil {
 		return nil, b, err
@@ -183,6 +183,7 @@ func (s *StreamRepo) findOneEntity(ctx context.Context, e entity.Entity, query *
 		{"nftAddress", query.NftAddress},
 		{"tokenId", query.TokenId},
 	})
+
 	err := result.Decode(e)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
