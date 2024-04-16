@@ -16,3 +16,4 @@ data:
 moralis:
   url: **
   key: **
+  secret: ** # The secret key is the streams secret which you can find in setting page.

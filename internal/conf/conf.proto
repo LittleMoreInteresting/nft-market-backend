@@ -48,4 +48,5 @@ message Data {
 message Moralis {
   string url = 1;
   string key = 2;
+  string secret = 3;
 }

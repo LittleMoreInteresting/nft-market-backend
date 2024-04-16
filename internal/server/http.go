@@ -2,6 +2,7 @@ package server
 
 import (
 	"github.com/go-kratos/kratos/v2/middleware/logging"
+	"github.com/go-kratos/kratos/v2/middleware/metadata"
 	"github.com/go-kratos/kratos/v2/middleware/validate"
 	mv1 "nft-market-backend/api/moralis/v1"
 	nftv1 "nft-market-backend/api/nftmarket/v1"
@@ -16,14 +17,18 @@ import (
 
 // NewHTTPServer new an HTTP server.
 func NewHTTPServer(c *conf.Server,
+	mc *conf.Moralis,
 	stream *service.StreamService,
 	nft *service.NftmarketService,
 	logger log.Logger) *http.Server {
+
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
 			logging.Server(logger),
 			validate.Validator(),
+			metadata.Server(metadata.WithPropagatedPrefix("x-")),
+			signatureMiddleware(mc),
 		),
 	}
 	if c.Http.Network != "" {
