@@ -10,8 +10,6 @@ import (
 	"net/http"
 	pb "nft-market-backend/api/nftmarket/v1"
 	"nft-market-backend/internal/conf"
-	"nft-market-backend/pkg/chainId"
-	"sync"
 )
 
 type SelfNft struct {
@@ -78,28 +76,18 @@ func (m *MarketUseCase) SelfPage(ctx context.Context, req *pb.SelfPageRequest) (
 	if err != nil {
 		return nil, err
 	}
-	var wg sync.WaitGroup
-	var metadataCh = make(chan *structpb.Struct, len(list))
-	for _, item := range list {
-		wg.Add(1)
-		go func(i *SelfNft) {
-			defer wg.Done()
-			metadata, errGetMetadata := m.GetMetadata(ctx, &pb.GetNFTMetadataRequest{
-				NftAddress: i.NftAddress,
-				TokenId:    i.TokenId,
-				ChainId:    chainId.ParseChainId(i.ChainId),
-			})
-			if errGetMetadata != nil {
-				return
-			}
-			metadataCh <- metadata
-		}(item)
-	}
-	wg.Wait()
-	close(metadataCh)
+
 	result := make([]*structpb.Struct, 0, len(list))
-	for ch := range metadataCh {
-		result = append(result, ch)
+	for _, item := range list {
+		pbStruct, _ := structpb.NewStruct(map[string]interface{}{
+			"id":         item.Id,
+			"chainId":    item.ChainId,
+			"nftAddress": item.NftAddress,
+			"tokenId":    item.TokenId,
+			"owner":      item.Owner,
+			"from":       item.From,
+		})
+		result = append(result, pbStruct)
 	}
 	return result, nil
 }
