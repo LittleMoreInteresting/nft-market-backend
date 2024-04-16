@@ -37,3 +37,4 @@ bin/
 .idea/
 *.swp
 test/
+/configs/local.config.yaml
