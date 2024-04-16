@@ -10,8 +10,6 @@ local_version=$(cat version.out)
 if [ "$local_version" == "$VERSION" ]; then
     echo "new version not found."
     exit 0
-else
-    echo "$VERSION" > version.out
 fi
 make build;
 
@@ -33,3 +31,4 @@ if [ -n "$new_id" ];
 then
 echo "[$new_id bin/nft-market-backend start ok !!!]"
 fi
+echo "$VERSION" > version.out
