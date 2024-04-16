@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/middleware"
 	"github.com/go-kratos/kratos/v2/middleware/selector"
@@ -24,7 +26,6 @@ func signatureMiddleware(conf *conf.Moralis) middleware.Middleware {
 				if tr, ok := transport.FromServerContext(ctx); ok {
 					token := tr.RequestHeader().Get("x-signature")
 					fmt.Println("signature", token)
-					fmt.Println("signature", conf.Secret)
 					if token == "" {
 						err = ERROR_UNAUTH
 						return
@@ -33,9 +34,14 @@ func signatureMiddleware(conf *conf.Moralis) middleware.Middleware {
 						request := ht.Request()
 						if request.Method == "POST" {
 							data, _ := io.ReadAll(request.Body)
+							fmt.Println("signature", string(data))
 							request.Body = io.NopCloser(bytes.NewBuffer(data))
-							if len(data) > 0 {
-								fmt.Println("signature", string(data))
+							signData := []byte(string(data) + conf.Secret)
+							hash := crypto.Keccak256Hash(signData)
+							signature := common.HexToHash(hash.Hex()).String()
+							if signature != token {
+								err = ERROR_UNAUTH
+								return
 							}
 						}
 					}
