@@ -112,145 +112,171 @@ func (uc *StreamUseCase) Receive(ctx context.Context, req *v1.ReceiveRequest) er
 
 		switch l.Topic0 {
 		case uc.marketAbi.Events["NftListed"].ID.Hex():
-			nftListed, err := uc.market.ParseNftListed(eventLog)
+			//NftListed
+			err := uc.nftListed(ctx, eventLog, chainId.String(), l.Address)
 			if err != nil {
-				return err
-			}
-			eventList := &EventListed{
-				ChainId:            chainId.String(),
-				MarketPlaceAddress: l.Address,
-				Seller:             nftListed.Seller.Hex(),
-				NftAddress:         nftListed.NftAddress.Hex(),
-				TokenId:            nftListed.TokenId.String(),
-				Price:              nftListed.Price.String(),
-			}
-			// list
-			list, exist, err := uc.repo.FindOneListed(ctx, &EventQuery{
-				ChainId:    eventList.ChainId,
-				NftAddress: eventList.NftAddress,
-				TokenId:    eventList.TokenId,
-			})
-			if err != nil {
-				return err
-			}
-			if exist {
-				// update
-				eventList.Id = list.Id
-				eventList.UpdateTime = time.Now().Unix()
-			}
-			err = uc.repo.SaveListed(ctx, eventList)
-			if err != nil {
-				return err
+				uc.log.Error("NftListed error:", err)
+				continue
 			}
 		case uc.marketAbi.Events["BuyNFT"].ID.Hex():
 			// Buy
-			nftBought, err := uc.market.ParseBuyNFT(eventLog)
+			err := uc.buyNft(ctx, eventLog, chainId.String(), l.Address)
 			if err != nil {
-				log.Error("ParseBuyNFT error:", err)
-				continue
-			}
-			event := &EventBought{
-				ChainId:            chainId.String(),
-				MarketPlaceAddress: l.Address,
-				Buyer:              nftBought.Buyer.Hex(),
-				NftAddress:         nftBought.NftAddress.Hex(),
-				TokenId:            nftBought.TokenId.String(),
-				Price:              nftBought.Price.String(),
-			}
-			query := &EventQuery{
-				ChainId:    event.ChainId,
-				NftAddress: event.NftAddress,
-				TokenId:    event.TokenId,
-			}
-			bought, exist, err := uc.repo.FindOneBought(ctx, query)
-			if err != nil {
-				log.Error("FindOneBought error:", err)
-				continue
-			}
-			if exist {
-				event.Id = bought.Id
-			}
-			err = uc.repo.SaveBought(ctx, event)
-			if err != nil {
-				log.Error("SaveBought error:", err)
-				continue
-			}
-			err = uc.repo.RemoveListed(ctx, query)
-			if err != nil {
-				log.Error("SaveBought error:", err)
+				uc.log.Error("BuyNFT error:", err)
 				continue
 			}
 		case uc.marketAbi.Events["CancelListing"].ID.Hex():
 			// cancel
-			cancel, err := uc.market.ParseCancelListing(eventLog)
+			err := uc.cancelListing(ctx, eventLog, chainId.String(), l.Address)
 			if err != nil {
-				log.Error("ParseCancelListing error:", err)
-				continue
-			}
-			event := &EventCancel{
-				ChainId:            chainId.String(),
-				MarketPlaceAddress: l.Address,
-				Seller:             cancel.Seller.Hex(),
-				NftAddress:         cancel.NftAddress.Hex(),
-				TokenId:            cancel.TokenId.String(),
-			}
-			query := &EventQuery{
-				ChainId:    event.ChainId,
-				NftAddress: event.NftAddress,
-				TokenId:    event.TokenId,
-			}
-			cancelList, exist, err := uc.repo.FindOneCancel(ctx, query)
-			if err != nil {
-				log.Error("FindOneCancel error:", err)
-				continue
-			}
-			if exist {
-				event.Id = cancelList.Id
-			}
-			err = uc.repo.SaveCancel(ctx, event)
-			if err != nil {
-				log.Error("SaveCancel error:", err)
-				continue
-			}
-			err = uc.repo.RemoveListed(ctx, query)
-			if err != nil {
-				log.Error("SaveCancel error:", err)
+				uc.log.Error("CancelListing error:", err)
 				continue
 			}
 		case uc.nftAbi.Events["Transfer"].ID.Hex():
 			// Transfer
-			transfer, err := uc.nft.ParseTransfer(eventLog)
+			err := uc.nftTransfer(ctx, eventLog, chainId.String(), l.Address)
 			if err != nil {
-				log.Error("ParseTransfer error:", err)
-				continue
-			}
-			event := &EventTransfer{
-				ChainId:    chainId.String(),
-				From:       transfer.From.Hex(),
-				Owner:      transfer.To.Hex(),
-				NftAddress: l.Address,
-				TokenId:    transfer.TokenId.String(),
-			}
-			query := &EventQuery{
-				ChainId:    event.ChainId,
-				NftAddress: event.NftAddress,
-				TokenId:    event.TokenId,
-			}
-
-			tr, exist, err := uc.repo.FindOneTransfer(ctx, query)
-			if err != nil {
-				log.Error("FindOneCancel error:", err)
-				continue
-			}
-			if exist {
-				event.Id = tr.Id
-			}
-			err = uc.repo.SaveNftTransfer(ctx, event)
-			if err != nil {
-				log.Error("SaveCancel error:", err)
+				uc.log.Error("nftTransfer error:", err)
 				continue
 			}
 		}
+	}
+	return nil
+}
+
+func (uc *StreamUseCase) nftListed(ctx context.Context, eventLog types.Log, chainId string, MarketPlaceAddress string) error {
+	nftListed, err := uc.market.ParseNftListed(eventLog)
+	if err != nil {
+		return err
+	}
+	eventList := &EventListed{
+		ChainId:            chainId,
+		MarketPlaceAddress: MarketPlaceAddress,
+		Seller:             nftListed.Seller.Hex(),
+		NftAddress:         nftListed.NftAddress.Hex(),
+		TokenId:            nftListed.TokenId.String(),
+		Price:              nftListed.Price.String(),
+	}
+	// list
+	list, exist, err := uc.repo.FindOneListed(ctx, &EventQuery{
+		ChainId:    eventList.ChainId,
+		NftAddress: eventList.NftAddress,
+		TokenId:    eventList.TokenId,
+	})
+	if err != nil {
+		return err
+	}
+	if exist {
+		// update
+		eventList.Id = list.Id
+		eventList.UpdateTime = time.Now().Unix()
+	}
+	err = uc.repo.SaveListed(ctx, eventList)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (uc *StreamUseCase) buyNft(ctx context.Context, eventLog types.Log, chainId string, MarketPlaceAddress string) error {
+	nftBought, err := uc.market.ParseBuyNFT(eventLog)
+	if err != nil {
+		return err
+	}
+	event := &EventBought{
+		ChainId:            chainId,
+		MarketPlaceAddress: MarketPlaceAddress,
+		Buyer:              nftBought.Buyer.Hex(),
+		NftAddress:         nftBought.NftAddress.Hex(),
+		TokenId:            nftBought.TokenId.String(),
+		Price:              nftBought.Price.String(),
+	}
+	query := &EventQuery{
+		ChainId:    event.ChainId,
+		NftAddress: event.NftAddress,
+		TokenId:    event.TokenId,
+	}
+	bought, exist, err := uc.repo.FindOneBought(ctx, query)
+	if err != nil {
+		return err
+	}
+	if exist {
+		event.Id = bought.Id
+	}
+	err = uc.repo.SaveBought(ctx, event)
+	if err != nil {
+		return err
+	}
+	err = uc.repo.RemoveListed(ctx, query)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (uc *StreamUseCase) cancelListing(ctx context.Context, eventLog types.Log, chainId string, MarketPlaceAddress string) error {
+	cancel, err := uc.market.ParseCancelListing(eventLog)
+	if err != nil {
+		return err
+	}
+	event := &EventCancel{
+		ChainId:            chainId,
+		MarketPlaceAddress: MarketPlaceAddress,
+		Seller:             cancel.Seller.Hex(),
+		NftAddress:         cancel.NftAddress.Hex(),
+		TokenId:            cancel.TokenId.String(),
+	}
+	query := &EventQuery{
+		ChainId:    event.ChainId,
+		NftAddress: event.NftAddress,
+		TokenId:    event.TokenId,
+	}
+	cancelList, exist, err := uc.repo.FindOneCancel(ctx, query)
+	if err != nil {
+		return err
+	}
+	if exist {
+		event.Id = cancelList.Id
+	}
+	err = uc.repo.SaveCancel(ctx, event)
+	if err != nil {
+		return err
+	}
+	err = uc.repo.RemoveListed(ctx, query)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (uc *StreamUseCase) nftTransfer(ctx context.Context, eventLog types.Log, chainId string, NftAddress string) error {
+	transfer, err := uc.nft.ParseTransfer(eventLog)
+	if err != nil {
+		return err
+	}
+	event := &EventTransfer{
+		ChainId:    chainId,
+		From:       transfer.From.Hex(),
+		Owner:      transfer.To.Hex(),
+		NftAddress: NftAddress,
+		TokenId:    transfer.TokenId.String(),
+	}
+	query := &EventQuery{
+		ChainId:    event.ChainId,
+		NftAddress: event.NftAddress,
+		TokenId:    event.TokenId,
+	}
+
+	tr, exist, err := uc.repo.FindOneTransfer(ctx, query)
+	if err != nil {
+		return err
+	}
+	if exist {
+		event.Id = tr.Id
+	}
+	err = uc.repo.SaveNftTransfer(ctx, event)
+	if err != nil {
+		return err
 	}
 	return nil
 }
