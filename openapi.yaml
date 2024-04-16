@@ -52,6 +52,39 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.nftmarket.v1.GetNFTMetadataReply'
+    /nft/self-page/list:
+        get:
+            tags:
+                - Nftmarket
+            operationId: Nftmarket_SelfPage
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: string
+                - name: nftAddress
+                  in: query
+                  schema:
+                    type: string
+                - name: owner
+                  in: query
+                  schema:
+                    type: string
+                - name: chainId
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.nftmarket.v1.SelfPageReply'
     /stream/receive:
         post:
             tags:
@@ -148,7 +181,7 @@ components:
                 nftTransfers:
                     type: array
                     items:
-                        $ref: '#/components/schemas/google.protobuf.Any'
+                        type: object
                 abi:
                     type: array
                     items:
@@ -269,6 +302,18 @@ components:
                 listedTime:
                     type: string
                 updateTime:
+                    type: string
+        api.nftmarket.v1.SelfPageReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                data:
+                    type: array
+                    items:
+                        type: object
+                msg:
                     type: string
         google.protobuf.Any:
             type: object

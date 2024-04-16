@@ -6,6 +6,7 @@ option go_package = "nft-market-backend/api/moralis/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.moralis.v1";
 import "google/protobuf/any.proto";
+import "google/protobuf/struct.proto";
 import "google/api/annotations.proto";
 service Stream {
 	rpc Receive (ReceiveRequest) returns (ReceiveReply){
@@ -20,7 +21,7 @@ message ReceiveReply{}
 message ReceiveRequest {
 	NftApprovals nftApprovals = 1;
 	string streamId = 2;
-	repeated google.protobuf.Any nftTransfers = 3;
+	repeated google.protobuf.Struct nftTransfers = 3;
 	repeated Abi abi = 4;
 	repeated google.protobuf.Any txsInternal = 5;
 	repeated google.protobuf.Any erc20Approvals = 6;

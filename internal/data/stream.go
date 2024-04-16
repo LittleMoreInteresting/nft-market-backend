@@ -52,18 +52,9 @@ func (s *StreamRepo) SaveListed(ctx context.Context, event *biz.EventListed) err
 
 func (s *StreamRepo) FindOneListed(ctx context.Context, event *biz.EventQuery) (*biz.EventListed, bool, error) {
 	listed := &entity.NftListed{}
-	db := s.data.mongo.Db.Collection(listed.CollectionName())
-	listResutl := db.FindOne(ctx, bson.D{
-		{"chainId", event.ChainId},
-		{"nftAddress", event.NftAddress},
-		{"tokenId", event.TokenId},
-	})
-	err := listResutl.Decode(listed)
+	b, err := s.findOneEntity(ctx, listed, event)
 	if err != nil {
-		if err == mongo.ErrNoDocuments {
-			return nil, false, nil
-		}
-		return nil, false, err
+		return nil, b, err
 	}
 	res := &biz.EventListed{}
 	_ = copier.Copy(res, listed)
@@ -83,18 +74,9 @@ func (s *StreamRepo) RemoveListed(ctx context.Context, event *biz.EventQuery) er
 
 func (s *StreamRepo) FindOneBought(ctx context.Context, event *biz.EventQuery) (*biz.EventBought, bool, error) {
 	listed := &entity.NftBought{}
-	db := s.data.mongo.Db.Collection(listed.CollectionName())
-	listResutl := db.FindOne(ctx, bson.D{
-		{"chainId", event.ChainId},
-		{"nftAddress", event.NftAddress},
-		{"tokenId", event.TokenId},
-	})
-	err := listResutl.Decode(listed)
+	b, err := s.findOneEntity(ctx, listed, event)
 	if err != nil {
-		if err == mongo.ErrNoDocuments {
-			return nil, false, nil
-		}
-		return nil, false, err
+		return nil, b, err
 	}
 	res := &biz.EventBought{}
 	_ = copier.Copy(res, listed)
@@ -127,18 +109,9 @@ func (s *StreamRepo) SaveBought(ctx context.Context, event *biz.EventBought) err
 
 func (s *StreamRepo) FindOneCancel(ctx context.Context, event *biz.EventQuery) (*biz.EventCancel, bool, error) {
 	listed := &entity.NftCanceled{}
-	db := s.data.mongo.Db.Collection(listed.CollectionName())
-	listResutl := db.FindOne(ctx, bson.D{
-		{"chainId", event.ChainId},
-		{"nftAddress", event.NftAddress},
-		{"tokenId", event.TokenId},
-	})
-	err := listResutl.Decode(listed)
+	b, err := s.findOneEntity(ctx, listed, event)
 	if err != nil {
-		if err == mongo.ErrNoDocuments {
-			return nil, false, nil
-		}
-		return nil, false, err
+		return nil, b, err
 	}
 	res := &biz.EventCancel{}
 	_ = copier.Copy(res, listed)
@@ -166,4 +139,56 @@ func (s *StreamRepo) SaveCancel(ctx context.Context, event *biz.EventCancel) err
 		}},
 	)
 	return err
+}
+
+func (s *StreamRepo) SaveNftTransfer(ctx context.Context, event *biz.EventTransfer) error {
+	entry := &entity.NftTransfer{}
+	db := s.data.mongo.Db.Collection(entry.CollectionName())
+	err := copier.Copy(entry, event)
+	if err != nil {
+		return err
+	}
+	entry.TransferTime = time.Now().Unix()
+	if entry.Id == "" {
+		_, err = db.InsertOne(ctx, entry)
+		return err
+	}
+	// update
+	hex, _ := primitive.ObjectIDFromHex(entry.Id)
+	_, err = db.UpdateOne(ctx,
+		bson.M{"_id": hex},
+		bson.M{"$set": bson.M{
+			"from":         entry.From,
+			"owner":        entry.Owner,
+			"transferTime": entry.TransferTime,
+		}},
+	)
+	return err
+}
+
+func (s *StreamRepo) FindOneTransfer(ctx context.Context, event *biz.EventQuery) (*biz.EventTransfer, bool, error) {
+	listed := &entity.NftCanceled{}
+	b, err := s.findOneEntity(ctx, listed, event)
+	if err != nil {
+		return nil, b, err
+	}
+	res := &biz.EventTransfer{}
+	_ = copier.Copy(res, listed)
+	return res, b, nil
+}
+
+func (s *StreamRepo) findOneEntity(ctx context.Context, e entity.Entity, query *biz.EventQuery) (bool, error) {
+	result := s.data.mongo.Db.Collection(e.CollectionName()).FindOne(ctx, bson.D{
+		{"chainId", query.ChainId},
+		{"nftAddress", query.NftAddress},
+		{"tokenId", query.TokenId},
+	})
+	err := result.Decode(e)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return false, nil
+		}
+		return false, err
+	}
+	return true, nil
 }

@@ -21,16 +21,19 @@ const _ = http.SupportPackageIsVersion1
 
 const OperationNftmarketGetNFTMetadata = "/api.nftmarket.v1.Nftmarket/GetNFTMetadata"
 const OperationNftmarketListedPage = "/api.nftmarket.v1.Nftmarket/ListedPage"
+const OperationNftmarketSelfPage = "/api.nftmarket.v1.Nftmarket/SelfPage"
 
 type NftmarketHTTPServer interface {
 	GetNFTMetadata(context.Context, *GetNFTMetadataRequest) (*GetNFTMetadataReply, error)
 	ListedPage(context.Context, *ListedPageRequest) (*ListedPageReply, error)
+	SelfPage(context.Context, *SelfPageRequest) (*SelfPageReply, error)
 }
 
 func RegisterNftmarketHTTPServer(s *http.Server, srv NftmarketHTTPServer) {
 	r := s.Route("/")
 	r.GET("/nft/metaData/getNFTMetadata", _Nftmarket_GetNFTMetadata0_HTTP_Handler(srv))
 	r.GET("/nft/listed/listedPage", _Nftmarket_ListedPage0_HTTP_Handler(srv))
+	r.GET("/nft/self-page/list", _Nftmarket_SelfPage0_HTTP_Handler(srv))
 }
 
 func _Nftmarket_GetNFTMetadata0_HTTP_Handler(srv NftmarketHTTPServer) func(ctx http.Context) error {
@@ -71,9 +74,29 @@ func _Nftmarket_ListedPage0_HTTP_Handler(srv NftmarketHTTPServer) func(ctx http.
 	}
 }
 
+func _Nftmarket_SelfPage0_HTTP_Handler(srv NftmarketHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in SelfPageRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationNftmarketSelfPage)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.SelfPage(ctx, req.(*SelfPageRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*SelfPageReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type NftmarketHTTPClient interface {
 	GetNFTMetadata(ctx context.Context, req *GetNFTMetadataRequest, opts ...http.CallOption) (rsp *GetNFTMetadataReply, err error)
 	ListedPage(ctx context.Context, req *ListedPageRequest, opts ...http.CallOption) (rsp *ListedPageReply, err error)
+	SelfPage(ctx context.Context, req *SelfPageRequest, opts ...http.CallOption) (rsp *SelfPageReply, err error)
 }
 
 type NftmarketHTTPClientImpl struct {
@@ -102,6 +125,19 @@ func (c *NftmarketHTTPClientImpl) ListedPage(ctx context.Context, in *ListedPage
 	pattern := "/nft/listed/listedPage"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationNftmarketListedPage))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *NftmarketHTTPClientImpl) SelfPage(ctx context.Context, in *SelfPageRequest, opts ...http.CallOption) (*SelfPageReply, error) {
+	var out SelfPageReply
+	pattern := "/nft/self-page/list"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationNftmarketSelfPage))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

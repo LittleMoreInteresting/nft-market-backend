@@ -14,6 +14,8 @@ type NftmarketService struct {
 	market *biz.MarketUseCase
 }
 
+var _ pb.NftmarketHTTPServer = (*NftmarketService)(nil)
+
 func NewNftmarketService(logger log.Logger, market *biz.MarketUseCase) *NftmarketService {
 	return &NftmarketService{
 		log:    log.NewHelper(log.With(logger, "module", "NftmarketService")),
@@ -47,6 +49,18 @@ func (s *NftmarketService) ListedPage(ctx context.Context, req *pb.ListedPageReq
 	return &pb.ListedPageReply{
 		Code: http.StatusOK,
 		Data: listed,
+		Msg:  "Success",
+	}, nil
+}
+
+func (s *NftmarketService) SelfPage(ctx context.Context, request *pb.SelfPageRequest) (*pb.SelfPageReply, error) {
+	page, err := s.market.SelfPage(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.SelfPageReply{
+		Code: http.StatusOK,
+		Data: page,
 		Msg:  "Success",
 	}, nil
 }

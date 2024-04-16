@@ -10,10 +10,21 @@ import (
 	"net/http"
 	pb "nft-market-backend/api/nftmarket/v1"
 	"nft-market-backend/internal/conf"
+	"nft-market-backend/pkg/chainId"
+	"sync"
 )
 
+type SelfNft struct {
+	Id         string
+	ChainId    string
+	NftAddress string
+	TokenId    string
+	Owner      string
+	From       string
+}
 type MarketRepo interface {
 	NftListed(ctx context.Context, req *pb.ListedPageRequest) ([]*pb.ListedPageReply_NftItem, error)
+	SelfNftList(ctx context.Context, req *pb.SelfPageRequest) ([]*SelfNft, error)
 }
 
 type MarketUseCase struct {
@@ -60,4 +71,35 @@ func (m *MarketUseCase) buildUrl(req *pb.GetNFTMetadataRequest) string {
 
 func (m *MarketUseCase) NftListed(ctx context.Context, req *pb.ListedPageRequest) ([]*pb.ListedPageReply_NftItem, error) {
 	return m.repo.NftListed(ctx, req)
+}
+
+func (m *MarketUseCase) SelfPage(ctx context.Context, req *pb.SelfPageRequest) ([]*structpb.Struct, error) {
+	list, err := m.repo.SelfNftList(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	var wg sync.WaitGroup
+	var metadataCh = make(chan *structpb.Struct, len(list))
+	for _, item := range list {
+		wg.Add(1)
+		go func(i *SelfNft) {
+			defer wg.Done()
+			metadata, errGetMetadata := m.GetMetadata(ctx, &pb.GetNFTMetadataRequest{
+				NftAddress: i.NftAddress,
+				TokenId:    i.TokenId,
+				ChainId:    chainId.ParseChainId(i.ChainId),
+			})
+			if errGetMetadata != nil {
+				return
+			}
+			metadataCh <- metadata
+		}(item)
+	}
+	wg.Wait()
+	close(metadataCh)
+	result := make([]*structpb.Struct, 0, len(list))
+	for ch := range metadataCh {
+		result = append(result, ch)
+	}
+	return result, nil
 }

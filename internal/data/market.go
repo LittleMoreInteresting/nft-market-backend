@@ -66,3 +66,49 @@ func (m *MarketRepo) NftListed(ctx context.Context, req *pb.ListedPageRequest) (
 	}
 	return results, nil
 }
+
+func (m *MarketRepo) SelfNftList(ctx context.Context, req *pb.SelfPageRequest) ([]*biz.SelfNft, error) {
+	collection := m.data.mongo.Db.Collection((&entity.NftTransfer{}).CollectionName())
+	skip := req.PageSize * (req.Page - 1)
+	sort := bson.M{"_id": -1}
+	findOptions := options.Find()
+	findOptions.SetLimit(req.PageSize)
+	findOptions.SetSkip(skip)
+	findOptions.SetSort(sort)
+
+	filter := bson.M{
+		"chainId": req.ChainId,
+		"owner":   req.Owner,
+	}
+	if req.NftAddress != "" {
+		filter["nftAddress"] = req.NftAddress
+	}
+	cursor, err := collection.Find(context.TODO(), filter, findOptions)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer cursor.Close(context.TODO())
+	var results []*biz.SelfNft
+	for cursor.Next(ctx) {
+		var result entity.NftTransfer
+		err := cursor.Decode(&result)
+		if err != nil {
+			m.log.Error(err)
+			continue
+		}
+		results = append(results, &biz.SelfNft{
+			Id:         result.Id,
+			ChainId:    result.ChainId,
+			NftAddress: result.NftAddress,
+			TokenId:    result.TokenId,
+			From:       result.From,
+			Owner:      result.Owner,
+		})
+	}
+
+	if err := cursor.Err(); err != nil {
+		m.log.Error(err)
+		return nil, err
+	}
+	return results, nil
+}

@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	Nftmarket_GetNFTMetadata_FullMethodName = "/api.nftmarket.v1.Nftmarket/GetNFTMetadata"
 	Nftmarket_ListedPage_FullMethodName     = "/api.nftmarket.v1.Nftmarket/ListedPage"
+	Nftmarket_SelfPage_FullMethodName       = "/api.nftmarket.v1.Nftmarket/SelfPage"
 )
 
 // NftmarketClient is the client API for Nftmarket service.
@@ -29,6 +30,7 @@ const (
 type NftmarketClient interface {
 	GetNFTMetadata(ctx context.Context, in *GetNFTMetadataRequest, opts ...grpc.CallOption) (*GetNFTMetadataReply, error)
 	ListedPage(ctx context.Context, in *ListedPageRequest, opts ...grpc.CallOption) (*ListedPageReply, error)
+	SelfPage(ctx context.Context, in *SelfPageRequest, opts ...grpc.CallOption) (*SelfPageReply, error)
 }
 
 type nftmarketClient struct {
@@ -57,12 +59,22 @@ func (c *nftmarketClient) ListedPage(ctx context.Context, in *ListedPageRequest,
 	return out, nil
 }
 
+func (c *nftmarketClient) SelfPage(ctx context.Context, in *SelfPageRequest, opts ...grpc.CallOption) (*SelfPageReply, error) {
+	out := new(SelfPageReply)
+	err := c.cc.Invoke(ctx, Nftmarket_SelfPage_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NftmarketServer is the server API for Nftmarket service.
 // All implementations must embed UnimplementedNftmarketServer
 // for forward compatibility
 type NftmarketServer interface {
 	GetNFTMetadata(context.Context, *GetNFTMetadataRequest) (*GetNFTMetadataReply, error)
 	ListedPage(context.Context, *ListedPageRequest) (*ListedPageReply, error)
+	SelfPage(context.Context, *SelfPageRequest) (*SelfPageReply, error)
 	mustEmbedUnimplementedNftmarketServer()
 }
 
@@ -75,6 +87,9 @@ func (UnimplementedNftmarketServer) GetNFTMetadata(context.Context, *GetNFTMetad
 }
 func (UnimplementedNftmarketServer) ListedPage(context.Context, *ListedPageRequest) (*ListedPageReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListedPage not implemented")
+}
+func (UnimplementedNftmarketServer) SelfPage(context.Context, *SelfPageRequest) (*SelfPageReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SelfPage not implemented")
 }
 func (UnimplementedNftmarketServer) mustEmbedUnimplementedNftmarketServer() {}
 
@@ -125,6 +140,24 @@ func _Nftmarket_ListedPage_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Nftmarket_SelfPage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SelfPageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NftmarketServer).SelfPage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Nftmarket_SelfPage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NftmarketServer).SelfPage(ctx, req.(*SelfPageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Nftmarket_ServiceDesc is the grpc.ServiceDesc for Nftmarket service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -139,6 +172,10 @@ var Nftmarket_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListedPage",
 			Handler:    _Nftmarket_ListedPage_Handler,
+		},
+		{
+			MethodName: "SelfPage",
+			Handler:    _Nftmarket_SelfPage_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

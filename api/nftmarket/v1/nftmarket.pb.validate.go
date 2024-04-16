@@ -567,6 +567,290 @@ var _ interface {
 	ErrorName() string
 } = ListedPageReplyValidationError{}
 
+// Validate checks the field values on SelfPageRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *SelfPageRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SelfPageRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// SelfPageRequestMultiError, or nil if none found.
+func (m *SelfPageRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SelfPageRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.GetPage() <= 0 {
+		err := SelfPageRequestValidationError{
+			field:  "Page",
+			reason: "value must be greater than 0",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if m.GetPageSize() <= 0 {
+		err := SelfPageRequestValidationError{
+			field:  "PageSize",
+			reason: "value must be greater than 0",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	// no validation rules for NftAddress
+
+	if utf8.RuneCountInString(m.GetOwner()) < 1 {
+		err := SelfPageRequestValidationError{
+			field:  "Owner",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if utf8.RuneCountInString(m.GetChainId()) < 1 {
+		err := SelfPageRequestValidationError{
+			field:  "ChainId",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return SelfPageRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// SelfPageRequestMultiError is an error wrapping multiple validation errors
+// returned by SelfPageRequest.ValidateAll() if the designated constraints
+// aren't met.
+type SelfPageRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SelfPageRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SelfPageRequestMultiError) AllErrors() []error { return m }
+
+// SelfPageRequestValidationError is the validation error returned by
+// SelfPageRequest.Validate if the designated constraints aren't met.
+type SelfPageRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SelfPageRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SelfPageRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SelfPageRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SelfPageRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SelfPageRequestValidationError) ErrorName() string { return "SelfPageRequestValidationError" }
+
+// Error satisfies the builtin error interface
+func (e SelfPageRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSelfPageRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SelfPageRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SelfPageRequestValidationError{}
+
+// Validate checks the field values on SelfPageReply with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *SelfPageReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SelfPageReply with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in SelfPageReplyMultiError, or
+// nil if none found.
+func (m *SelfPageReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SelfPageReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Code
+
+	for idx, item := range m.GetData() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, SelfPageReplyValidationError{
+						field:  fmt.Sprintf("Data[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, SelfPageReplyValidationError{
+						field:  fmt.Sprintf("Data[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return SelfPageReplyValidationError{
+					field:  fmt.Sprintf("Data[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	// no validation rules for Msg
+
+	if len(errors) > 0 {
+		return SelfPageReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// SelfPageReplyMultiError is an error wrapping multiple validation errors
+// returned by SelfPageReply.ValidateAll() if the designated constraints
+// aren't met.
+type SelfPageReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SelfPageReplyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SelfPageReplyMultiError) AllErrors() []error { return m }
+
+// SelfPageReplyValidationError is the validation error returned by
+// SelfPageReply.Validate if the designated constraints aren't met.
+type SelfPageReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SelfPageReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SelfPageReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SelfPageReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SelfPageReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SelfPageReplyValidationError) ErrorName() string { return "SelfPageReplyValidationError" }
+
+// Error satisfies the builtin error interface
+func (e SelfPageReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSelfPageReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SelfPageReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SelfPageReplyValidationError{}
+
 // Validate checks the field values on ListedPageReply_NftItem with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.

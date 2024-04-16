@@ -48,6 +48,15 @@ type EventQuery struct {
 	TokenId    string
 }
 
+type EventTransfer struct {
+	Id         string
+	ChainId    string
+	NftAddress string
+	TokenId    string
+	Owner      string
+	From       string
+}
+
 type StreamRepo interface {
 	FindOneListed(ctx context.Context, event *EventQuery) (*EventListed, bool, error)
 	SaveListed(ctx context.Context, event *EventListed) error
@@ -56,24 +65,32 @@ type StreamRepo interface {
 	SaveBought(ctx context.Context, event *EventBought) error
 	FindOneCancel(ctx context.Context, event *EventQuery) (*EventCancel, bool, error)
 	SaveCancel(ctx context.Context, event *EventCancel) error
+	SaveNftTransfer(ctx context.Context, event *EventTransfer) error
+	FindOneTransfer(ctx context.Context, event *EventQuery) (*EventTransfer, bool, error)
 }
 
 type StreamUseCase struct {
-	log    *log.Helper
-	repo   StreamRepo
-	abi    *abi.ABI
-	market *contracts.HoraceNFTMarket // 仅用于解析日志，不做线上交互
+	log       *log.Helper
+	repo      StreamRepo
+	marketAbi *abi.ABI
+	market    *contracts.HoraceNFTMarket // 仅用于解析日志，不做线上交互
+	nftAbi    *abi.ABI
+	nft       *contracts.HoraceNFT
 }
 
 func NewStreamUseCase(repo StreamRepo, logger log.Logger) *StreamUseCase {
 	l := log.NewHelper(log.With(logger, "module", "StreamUseCase"))
 	marketAbi, _ := contracts.HoraceNFTMarketMetaData.GetAbi()
 	market, _ := contracts.NewHoraceNFTMarket(common.Address{}, nil)
+	nftAbi, _ := contracts.HoraceNFTMetaData.GetAbi()
+	nft, _ := contracts.NewHoraceNFT(common.Address{}, nil)
 	return &StreamUseCase{
-		repo:   repo,
-		log:    l,
-		abi:    marketAbi,
-		market: market,
+		repo:      repo,
+		log:       l,
+		marketAbi: marketAbi,
+		nftAbi:    nftAbi,
+		market:    market,
+		nft:       nft,
 	}
 }
 
@@ -94,7 +111,7 @@ func (uc *StreamUseCase) Receive(ctx context.Context, req *v1.ReceiveRequest) er
 		}
 
 		switch l.Topic0 {
-		case uc.abi.Events["NftListed"].ID.Hex():
+		case uc.marketAbi.Events["NftListed"].ID.Hex():
 			nftListed, err := uc.market.ParseNftListed(eventLog)
 			if err != nil {
 				return err
@@ -125,11 +142,12 @@ func (uc *StreamUseCase) Receive(ctx context.Context, req *v1.ReceiveRequest) er
 			if err != nil {
 				return err
 			}
-		case uc.abi.Events["BuyNFT"].ID.Hex():
+		case uc.marketAbi.Events["BuyNFT"].ID.Hex():
 			// Buy
 			nftBought, err := uc.market.ParseBuyNFT(eventLog)
 			if err != nil {
-				return err
+				log.Error("ParseBuyNFT error:", err)
+				continue
 			}
 			event := &EventBought{
 				ChainId:            chainId.String(),
@@ -147,7 +165,7 @@ func (uc *StreamUseCase) Receive(ctx context.Context, req *v1.ReceiveRequest) er
 			bought, exist, err := uc.repo.FindOneBought(ctx, query)
 			if err != nil {
 				log.Error("FindOneBought error:", err)
-				return err
+				continue
 			}
 			if exist {
 				event.Id = bought.Id
@@ -155,19 +173,19 @@ func (uc *StreamUseCase) Receive(ctx context.Context, req *v1.ReceiveRequest) er
 			err = uc.repo.SaveBought(ctx, event)
 			if err != nil {
 				log.Error("SaveBought error:", err)
-				return err
+				continue
 			}
 			err = uc.repo.RemoveListed(ctx, query)
 			if err != nil {
 				log.Error("SaveBought error:", err)
-				return err
+				continue
 			}
-
-		case uc.abi.Events["CancelListing"].ID.Hex():
+		case uc.marketAbi.Events["CancelListing"].ID.Hex():
 			// cancel
 			cancel, err := uc.market.ParseCancelListing(eventLog)
 			if err != nil {
-				return err
+				log.Error("ParseCancelListing error:", err)
+				continue
 			}
 			event := &EventCancel{
 				ChainId:            chainId.String(),
@@ -184,7 +202,7 @@ func (uc *StreamUseCase) Receive(ctx context.Context, req *v1.ReceiveRequest) er
 			cancelList, exist, err := uc.repo.FindOneCancel(ctx, query)
 			if err != nil {
 				log.Error("FindOneCancel error:", err)
-				return err
+				continue
 			}
 			if exist {
 				event.Id = cancelList.Id
@@ -192,16 +210,47 @@ func (uc *StreamUseCase) Receive(ctx context.Context, req *v1.ReceiveRequest) er
 			err = uc.repo.SaveCancel(ctx, event)
 			if err != nil {
 				log.Error("SaveCancel error:", err)
-				return err
+				continue
 			}
 			err = uc.repo.RemoveListed(ctx, query)
 			if err != nil {
 				log.Error("SaveCancel error:", err)
-				return err
+				continue
+			}
+		case uc.nftAbi.Events["Transfer"].ID.Hex():
+			// Transfer
+			transfer, err := uc.nft.ParseTransfer(eventLog)
+			if err != nil {
+				log.Error("ParseTransfer error:", err)
+				continue
+			}
+			event := &EventTransfer{
+				ChainId:    chainId.String(),
+				From:       transfer.From.Hex(),
+				Owner:      transfer.To.Hex(),
+				NftAddress: l.Address,
+				TokenId:    transfer.TokenId.String(),
+			}
+			query := &EventQuery{
+				ChainId:    event.ChainId,
+				NftAddress: event.NftAddress,
+				TokenId:    event.TokenId,
 			}
 
+			tr, exist, err := uc.repo.FindOneTransfer(ctx, query)
+			if err != nil {
+				log.Error("FindOneCancel error:", err)
+				continue
+			}
+			if exist {
+				event.Id = tr.Id
+			}
+			err = uc.repo.SaveNftTransfer(ctx, event)
+			if err != nil {
+				log.Error("SaveCancel error:", err)
+				continue
+			}
 		}
 	}
-
 	return nil
 }
