@@ -1,7 +1,7 @@
 package entity
 
 type NftCanceled struct {
-	Id                 string `bson:"_id"`
+	Id                 string `bson:"_id,omitempty"`
 	ChainId            string `bson:"chainId"`
 	MarketPlaceAddress string `bson:"marketPlaceAddress"`
 	Seller             string `bson:"seller"`
