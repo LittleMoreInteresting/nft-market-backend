@@ -28,7 +28,7 @@ func NewHTTPServer(c *conf.Server,
 			logging.Server(logger),
 			validate.Validator(),
 			metadata.Server(metadata.WithPropagatedPrefix("x-")),
-			signatureMiddleware(mc),
+			//signatureMiddleware(mc),
 		),
 	}
 	if c.Http.Network != "" {
