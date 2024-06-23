@@ -39,7 +39,7 @@ func (e *ERC721Event) Metadata() *bind.MetaData {
 func (e *ERC721Event) Handlers() map[string]eventserver.EventHandler {
 	return map[string]eventserver.EventHandler{
 		"Transfer": func(ctx context.Context, log types.Log) {
-			err := e.marketUC.NftTransfer(ctx, log, ChainId, NFTMarketAddr.String())
+			err := e.marketUC.NftTransfer(ctx, log, ChainId, NFTAddr.String())
 			if err != nil {
 				e.log.Error(err)
 			}
