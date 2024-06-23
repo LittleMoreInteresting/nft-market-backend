@@ -49,6 +49,7 @@ api:
 abi:
 	abigen --abi=abi/HoraceNFTMarket.abi --pkg=contracts --type=HoraceNFTMarket --out=abi/HoraceNFTMarket.go
 	abigen --abi=abi/HoraceNFT.abi --pkg=contracts --type=HoraceNFT --out=abi/HoraceNFT.go
+	abigen --abi=abi/OBToken.abi --pkg=contracts --type=OBToken --out=abi/OBToken.go
 
 
 .PHONY: build

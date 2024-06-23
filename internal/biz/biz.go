@@ -6,6 +6,10 @@ import (
 )
 
 // ProviderSet is biz providers.
-var ProviderSet = wire.NewSet(NewStreamUseCase, NewMarketUseCase)
+var ProviderSet = wire.NewSet(
+	NewStreamUseCase,
+	NewMarketUseCase,
+	NewNFTMarketUseCase,
+)
 
 var ErrNFTNotFound = errors.New(404, "NFT not found", "NFT not found")

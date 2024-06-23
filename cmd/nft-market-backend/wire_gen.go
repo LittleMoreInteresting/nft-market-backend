@@ -35,7 +35,11 @@ func wireApp(confServer *conf.Server, confData *conf.Data, moralis *conf.Moralis
 	marketUseCase := biz.NewMarketUseCase(logger, marketRepo, moralis)
 	nftmarketService := service.NewNftmarketService(logger, marketUseCase)
 	httpServer := server.NewHTTPServer(confServer, moralis, streamService, nftmarketService, logger)
-	app := newApp(logger, httpServer)
+	erc20Event := service.NewERC20Event()
+	nftMarketUseCase := biz.NewNFTMarketUseCase(streamRepo, logger)
+	nftMarketEvent := service.NewNFTMarketEvent(logger, nftMarketUseCase)
+	eventserverServer := server.NewEventServer(erc20Event, nftMarketEvent)
+	app := newApp(logger, httpServer, eventserverServer)
 	return app, func() {
 		cleanup()
 	}, nil

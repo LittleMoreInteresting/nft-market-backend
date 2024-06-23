@@ -29,15 +29,15 @@ var (
 	_ = abi.ConvertType
 )
 
-// HoraceNFTMarketListing is an auto generated low-level Go binding around an user-defined struct.
-type HoraceNFTMarketListing struct {
+// NFTMarketListing is an auto generated low-level Go binding around an user-defined struct.
+type NFTMarketListing struct {
 	Price  *big.Int
 	Seller common.Address
 }
 
 // HoraceNFTMarketMetaData contains all meta data concerning the HoraceNFTMarket contract.
 var HoraceNFTMarketMetaData = &bind.MetaData{
-	ABI: "[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"nftAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"ErrorNFTHasListed\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"nftAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"ErrorNFTHasNotListed\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"ErrorNFTInvalidOwner\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ErrorNFTInvalidPrice\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"nftAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"ErrorNFTNotApproved\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ErrorNoProceed\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ReentrancyGuardReentrantCall\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"buyer\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"nftAddress\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"price\",\"type\":\"uint256\"}],\"name\":\"BuyNFT\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"seller\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"nftAddress\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"CancelListing\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"seller\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"nftAddress\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"price\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"old_price\",\"type\":\"uint256\"}],\"name\":\"NftListed\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"_owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"nftAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"buyNFT\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"nftAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"cancelList\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"nftAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"getListing\",\"outputs\":[{\"components\":[{\"internalType\":\"uint256\",\"name\":\"price\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"seller\",\"type\":\"address\"}],\"internalType\":\"structHoraceNFTMarket.Listing\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"seller\",\"type\":\"address\"}],\"name\":\"getProceeds\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"nftAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"price\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"listNFT\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"nftAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"newPrice\",\"type\":\"uint256\"}],\"name\":\"updateListing\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"withDrawProceeds\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
+	ABI: "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"nftAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"ErrorNFTHasListed\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"nftAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"ErrorNFTHasNotListed\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"ErrorNFTInvalidOwner\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ErrorNFTInvalidPrice\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"nftAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"ErrorNFTNotApproved\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ErrorNoProceed\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ReentrancyGuardReentrantCall\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"buyer\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"nftAddress\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"price\",\"type\":\"uint256\"}],\"name\":\"BuyNFT\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"seller\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"nftAddress\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"CancelListing\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"seller\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"nftAddress\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"price\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"old_price\",\"type\":\"uint256\"}],\"name\":\"NftListed\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"_owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"_token\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"nftAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"buy\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"nftAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"cancel\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"nftAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"getListing\",\"outputs\":[{\"components\":[{\"internalType\":\"uint256\",\"name\":\"price\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"seller\",\"type\":\"address\"}],\"internalType\":\"structNFTMarket.Listing\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"nftAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"price\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"list\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"nftAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"name\":\"permitBuy\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"nftAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"newPrice\",\"type\":\"uint256\"}],\"name\":\"update\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
 }
 
 // HoraceNFTMarketABI is the input ABI used to generate the binding from.
@@ -217,18 +217,49 @@ func (_HoraceNFTMarket *HoraceNFTMarketCallerSession) Owner() (common.Address, e
 	return _HoraceNFTMarket.Contract.Owner(&_HoraceNFTMarket.CallOpts)
 }
 
+// Token is a free data retrieval call binding the contract method 0xecd0c0c3.
+//
+// Solidity: function _token() view returns(address)
+func (_HoraceNFTMarket *HoraceNFTMarketCaller) Token(opts *bind.CallOpts) (common.Address, error) {
+	var out []interface{}
+	err := _HoraceNFTMarket.contract.Call(opts, &out, "_token")
+
+	if err != nil {
+		return *new(common.Address), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
+
+	return out0, err
+
+}
+
+// Token is a free data retrieval call binding the contract method 0xecd0c0c3.
+//
+// Solidity: function _token() view returns(address)
+func (_HoraceNFTMarket *HoraceNFTMarketSession) Token() (common.Address, error) {
+	return _HoraceNFTMarket.Contract.Token(&_HoraceNFTMarket.CallOpts)
+}
+
+// Token is a free data retrieval call binding the contract method 0xecd0c0c3.
+//
+// Solidity: function _token() view returns(address)
+func (_HoraceNFTMarket *HoraceNFTMarketCallerSession) Token() (common.Address, error) {
+	return _HoraceNFTMarket.Contract.Token(&_HoraceNFTMarket.CallOpts)
+}
+
 // GetListing is a free data retrieval call binding the contract method 0x88700d1c.
 //
 // Solidity: function getListing(address nftAddress, uint256 tokenId) view returns((uint256,address))
-func (_HoraceNFTMarket *HoraceNFTMarketCaller) GetListing(opts *bind.CallOpts, nftAddress common.Address, tokenId *big.Int) (HoraceNFTMarketListing, error) {
+func (_HoraceNFTMarket *HoraceNFTMarketCaller) GetListing(opts *bind.CallOpts, nftAddress common.Address, tokenId *big.Int) (NFTMarketListing, error) {
 	var out []interface{}
 	err := _HoraceNFTMarket.contract.Call(opts, &out, "getListing", nftAddress, tokenId)
 
 	if err != nil {
-		return *new(HoraceNFTMarketListing), err
+		return *new(NFTMarketListing), err
 	}
 
-	out0 := *abi.ConvertType(out[0], new(HoraceNFTMarketListing)).(*HoraceNFTMarketListing)
+	out0 := *abi.ConvertType(out[0], new(NFTMarketListing)).(*NFTMarketListing)
 
 	return out0, err
 
@@ -237,151 +268,120 @@ func (_HoraceNFTMarket *HoraceNFTMarketCaller) GetListing(opts *bind.CallOpts, n
 // GetListing is a free data retrieval call binding the contract method 0x88700d1c.
 //
 // Solidity: function getListing(address nftAddress, uint256 tokenId) view returns((uint256,address))
-func (_HoraceNFTMarket *HoraceNFTMarketSession) GetListing(nftAddress common.Address, tokenId *big.Int) (HoraceNFTMarketListing, error) {
+func (_HoraceNFTMarket *HoraceNFTMarketSession) GetListing(nftAddress common.Address, tokenId *big.Int) (NFTMarketListing, error) {
 	return _HoraceNFTMarket.Contract.GetListing(&_HoraceNFTMarket.CallOpts, nftAddress, tokenId)
 }
 
 // GetListing is a free data retrieval call binding the contract method 0x88700d1c.
 //
 // Solidity: function getListing(address nftAddress, uint256 tokenId) view returns((uint256,address))
-func (_HoraceNFTMarket *HoraceNFTMarketCallerSession) GetListing(nftAddress common.Address, tokenId *big.Int) (HoraceNFTMarketListing, error) {
+func (_HoraceNFTMarket *HoraceNFTMarketCallerSession) GetListing(nftAddress common.Address, tokenId *big.Int) (NFTMarketListing, error) {
 	return _HoraceNFTMarket.Contract.GetListing(&_HoraceNFTMarket.CallOpts, nftAddress, tokenId)
 }
 
-// GetProceeds is a free data retrieval call binding the contract method 0x30cfeda9.
+// Buy is a paid mutator transaction binding the contract method 0xcce7ec13.
 //
-// Solidity: function getProceeds(address seller) view returns(uint256)
-func (_HoraceNFTMarket *HoraceNFTMarketCaller) GetProceeds(opts *bind.CallOpts, seller common.Address) (*big.Int, error) {
-	var out []interface{}
-	err := _HoraceNFTMarket.contract.Call(opts, &out, "getProceeds", seller)
-
-	if err != nil {
-		return *new(*big.Int), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
-
-	return out0, err
-
+// Solidity: function buy(address nftAddress, uint256 tokenId) payable returns()
+func (_HoraceNFTMarket *HoraceNFTMarketTransactor) Buy(opts *bind.TransactOpts, nftAddress common.Address, tokenId *big.Int) (*types.Transaction, error) {
+	return _HoraceNFTMarket.contract.Transact(opts, "buy", nftAddress, tokenId)
 }
 
-// GetProceeds is a free data retrieval call binding the contract method 0x30cfeda9.
+// Buy is a paid mutator transaction binding the contract method 0xcce7ec13.
 //
-// Solidity: function getProceeds(address seller) view returns(uint256)
-func (_HoraceNFTMarket *HoraceNFTMarketSession) GetProceeds(seller common.Address) (*big.Int, error) {
-	return _HoraceNFTMarket.Contract.GetProceeds(&_HoraceNFTMarket.CallOpts, seller)
+// Solidity: function buy(address nftAddress, uint256 tokenId) payable returns()
+func (_HoraceNFTMarket *HoraceNFTMarketSession) Buy(nftAddress common.Address, tokenId *big.Int) (*types.Transaction, error) {
+	return _HoraceNFTMarket.Contract.Buy(&_HoraceNFTMarket.TransactOpts, nftAddress, tokenId)
 }
 
-// GetProceeds is a free data retrieval call binding the contract method 0x30cfeda9.
+// Buy is a paid mutator transaction binding the contract method 0xcce7ec13.
 //
-// Solidity: function getProceeds(address seller) view returns(uint256)
-func (_HoraceNFTMarket *HoraceNFTMarketCallerSession) GetProceeds(seller common.Address) (*big.Int, error) {
-	return _HoraceNFTMarket.Contract.GetProceeds(&_HoraceNFTMarket.CallOpts, seller)
+// Solidity: function buy(address nftAddress, uint256 tokenId) payable returns()
+func (_HoraceNFTMarket *HoraceNFTMarketTransactorSession) Buy(nftAddress common.Address, tokenId *big.Int) (*types.Transaction, error) {
+	return _HoraceNFTMarket.Contract.Buy(&_HoraceNFTMarket.TransactOpts, nftAddress, tokenId)
 }
 
-// BuyNFT is a paid mutator transaction binding the contract method 0xa82ba76f.
+// Cancel is a paid mutator transaction binding the contract method 0x98590ef9.
 //
-// Solidity: function buyNFT(address nftAddress, uint256 tokenId) payable returns()
-func (_HoraceNFTMarket *HoraceNFTMarketTransactor) BuyNFT(opts *bind.TransactOpts, nftAddress common.Address, tokenId *big.Int) (*types.Transaction, error) {
-	return _HoraceNFTMarket.contract.Transact(opts, "buyNFT", nftAddress, tokenId)
+// Solidity: function cancel(address nftAddress, uint256 tokenId) returns()
+func (_HoraceNFTMarket *HoraceNFTMarketTransactor) Cancel(opts *bind.TransactOpts, nftAddress common.Address, tokenId *big.Int) (*types.Transaction, error) {
+	return _HoraceNFTMarket.contract.Transact(opts, "cancel", nftAddress, tokenId)
 }
 
-// BuyNFT is a paid mutator transaction binding the contract method 0xa82ba76f.
+// Cancel is a paid mutator transaction binding the contract method 0x98590ef9.
 //
-// Solidity: function buyNFT(address nftAddress, uint256 tokenId) payable returns()
-func (_HoraceNFTMarket *HoraceNFTMarketSession) BuyNFT(nftAddress common.Address, tokenId *big.Int) (*types.Transaction, error) {
-	return _HoraceNFTMarket.Contract.BuyNFT(&_HoraceNFTMarket.TransactOpts, nftAddress, tokenId)
+// Solidity: function cancel(address nftAddress, uint256 tokenId) returns()
+func (_HoraceNFTMarket *HoraceNFTMarketSession) Cancel(nftAddress common.Address, tokenId *big.Int) (*types.Transaction, error) {
+	return _HoraceNFTMarket.Contract.Cancel(&_HoraceNFTMarket.TransactOpts, nftAddress, tokenId)
 }
 
-// BuyNFT is a paid mutator transaction binding the contract method 0xa82ba76f.
+// Cancel is a paid mutator transaction binding the contract method 0x98590ef9.
 //
-// Solidity: function buyNFT(address nftAddress, uint256 tokenId) payable returns()
-func (_HoraceNFTMarket *HoraceNFTMarketTransactorSession) BuyNFT(nftAddress common.Address, tokenId *big.Int) (*types.Transaction, error) {
-	return _HoraceNFTMarket.Contract.BuyNFT(&_HoraceNFTMarket.TransactOpts, nftAddress, tokenId)
+// Solidity: function cancel(address nftAddress, uint256 tokenId) returns()
+func (_HoraceNFTMarket *HoraceNFTMarketTransactorSession) Cancel(nftAddress common.Address, tokenId *big.Int) (*types.Transaction, error) {
+	return _HoraceNFTMarket.Contract.Cancel(&_HoraceNFTMarket.TransactOpts, nftAddress, tokenId)
 }
 
-// CancelList is a paid mutator transaction binding the contract method 0x1af71a8e.
+// List is a paid mutator transaction binding the contract method 0xdda342bb.
 //
-// Solidity: function cancelList(address nftAddress, uint256 tokenId) returns()
-func (_HoraceNFTMarket *HoraceNFTMarketTransactor) CancelList(opts *bind.TransactOpts, nftAddress common.Address, tokenId *big.Int) (*types.Transaction, error) {
-	return _HoraceNFTMarket.contract.Transact(opts, "cancelList", nftAddress, tokenId)
+// Solidity: function list(address nftAddress, uint256 price, uint256 tokenId) returns()
+func (_HoraceNFTMarket *HoraceNFTMarketTransactor) List(opts *bind.TransactOpts, nftAddress common.Address, price *big.Int, tokenId *big.Int) (*types.Transaction, error) {
+	return _HoraceNFTMarket.contract.Transact(opts, "list", nftAddress, price, tokenId)
 }
 
-// CancelList is a paid mutator transaction binding the contract method 0x1af71a8e.
+// List is a paid mutator transaction binding the contract method 0xdda342bb.
 //
-// Solidity: function cancelList(address nftAddress, uint256 tokenId) returns()
-func (_HoraceNFTMarket *HoraceNFTMarketSession) CancelList(nftAddress common.Address, tokenId *big.Int) (*types.Transaction, error) {
-	return _HoraceNFTMarket.Contract.CancelList(&_HoraceNFTMarket.TransactOpts, nftAddress, tokenId)
+// Solidity: function list(address nftAddress, uint256 price, uint256 tokenId) returns()
+func (_HoraceNFTMarket *HoraceNFTMarketSession) List(nftAddress common.Address, price *big.Int, tokenId *big.Int) (*types.Transaction, error) {
+	return _HoraceNFTMarket.Contract.List(&_HoraceNFTMarket.TransactOpts, nftAddress, price, tokenId)
 }
 
-// CancelList is a paid mutator transaction binding the contract method 0x1af71a8e.
+// List is a paid mutator transaction binding the contract method 0xdda342bb.
 //
-// Solidity: function cancelList(address nftAddress, uint256 tokenId) returns()
-func (_HoraceNFTMarket *HoraceNFTMarketTransactorSession) CancelList(nftAddress common.Address, tokenId *big.Int) (*types.Transaction, error) {
-	return _HoraceNFTMarket.Contract.CancelList(&_HoraceNFTMarket.TransactOpts, nftAddress, tokenId)
+// Solidity: function list(address nftAddress, uint256 price, uint256 tokenId) returns()
+func (_HoraceNFTMarket *HoraceNFTMarketTransactorSession) List(nftAddress common.Address, price *big.Int, tokenId *big.Int) (*types.Transaction, error) {
+	return _HoraceNFTMarket.Contract.List(&_HoraceNFTMarket.TransactOpts, nftAddress, price, tokenId)
 }
 
-// ListNFT is a paid mutator transaction binding the contract method 0xad05f1b4.
+// PermitBuy is a paid mutator transaction binding the contract method 0x71a121ab.
 //
-// Solidity: function listNFT(address nftAddress, uint256 price, uint256 tokenId) returns()
-func (_HoraceNFTMarket *HoraceNFTMarketTransactor) ListNFT(opts *bind.TransactOpts, nftAddress common.Address, price *big.Int, tokenId *big.Int) (*types.Transaction, error) {
-	return _HoraceNFTMarket.contract.Transact(opts, "listNFT", nftAddress, price, tokenId)
+// Solidity: function permitBuy(address nftAddress, uint256 tokenId, uint256 amount, uint256 deadline, bytes signature) payable returns()
+func (_HoraceNFTMarket *HoraceNFTMarketTransactor) PermitBuy(opts *bind.TransactOpts, nftAddress common.Address, tokenId *big.Int, amount *big.Int, deadline *big.Int, signature []byte) (*types.Transaction, error) {
+	return _HoraceNFTMarket.contract.Transact(opts, "permitBuy", nftAddress, tokenId, amount, deadline, signature)
 }
 
-// ListNFT is a paid mutator transaction binding the contract method 0xad05f1b4.
+// PermitBuy is a paid mutator transaction binding the contract method 0x71a121ab.
 //
-// Solidity: function listNFT(address nftAddress, uint256 price, uint256 tokenId) returns()
-func (_HoraceNFTMarket *HoraceNFTMarketSession) ListNFT(nftAddress common.Address, price *big.Int, tokenId *big.Int) (*types.Transaction, error) {
-	return _HoraceNFTMarket.Contract.ListNFT(&_HoraceNFTMarket.TransactOpts, nftAddress, price, tokenId)
+// Solidity: function permitBuy(address nftAddress, uint256 tokenId, uint256 amount, uint256 deadline, bytes signature) payable returns()
+func (_HoraceNFTMarket *HoraceNFTMarketSession) PermitBuy(nftAddress common.Address, tokenId *big.Int, amount *big.Int, deadline *big.Int, signature []byte) (*types.Transaction, error) {
+	return _HoraceNFTMarket.Contract.PermitBuy(&_HoraceNFTMarket.TransactOpts, nftAddress, tokenId, amount, deadline, signature)
 }
 
-// ListNFT is a paid mutator transaction binding the contract method 0xad05f1b4.
+// PermitBuy is a paid mutator transaction binding the contract method 0x71a121ab.
 //
-// Solidity: function listNFT(address nftAddress, uint256 price, uint256 tokenId) returns()
-func (_HoraceNFTMarket *HoraceNFTMarketTransactorSession) ListNFT(nftAddress common.Address, price *big.Int, tokenId *big.Int) (*types.Transaction, error) {
-	return _HoraceNFTMarket.Contract.ListNFT(&_HoraceNFTMarket.TransactOpts, nftAddress, price, tokenId)
+// Solidity: function permitBuy(address nftAddress, uint256 tokenId, uint256 amount, uint256 deadline, bytes signature) payable returns()
+func (_HoraceNFTMarket *HoraceNFTMarketTransactorSession) PermitBuy(nftAddress common.Address, tokenId *big.Int, amount *big.Int, deadline *big.Int, signature []byte) (*types.Transaction, error) {
+	return _HoraceNFTMarket.Contract.PermitBuy(&_HoraceNFTMarket.TransactOpts, nftAddress, tokenId, amount, deadline, signature)
 }
 
-// UpdateListing is a paid mutator transaction binding the contract method 0xf772adf1.
+// Update is a paid mutator transaction binding the contract method 0xd09b6d43.
 //
-// Solidity: function updateListing(address nftAddress, uint256 tokenId, uint256 newPrice) returns()
-func (_HoraceNFTMarket *HoraceNFTMarketTransactor) UpdateListing(opts *bind.TransactOpts, nftAddress common.Address, tokenId *big.Int, newPrice *big.Int) (*types.Transaction, error) {
-	return _HoraceNFTMarket.contract.Transact(opts, "updateListing", nftAddress, tokenId, newPrice)
+// Solidity: function update(address nftAddress, uint256 tokenId, uint256 newPrice) returns()
+func (_HoraceNFTMarket *HoraceNFTMarketTransactor) Update(opts *bind.TransactOpts, nftAddress common.Address, tokenId *big.Int, newPrice *big.Int) (*types.Transaction, error) {
+	return _HoraceNFTMarket.contract.Transact(opts, "update", nftAddress, tokenId, newPrice)
 }
 
-// UpdateListing is a paid mutator transaction binding the contract method 0xf772adf1.
+// Update is a paid mutator transaction binding the contract method 0xd09b6d43.
 //
-// Solidity: function updateListing(address nftAddress, uint256 tokenId, uint256 newPrice) returns()
-func (_HoraceNFTMarket *HoraceNFTMarketSession) UpdateListing(nftAddress common.Address, tokenId *big.Int, newPrice *big.Int) (*types.Transaction, error) {
-	return _HoraceNFTMarket.Contract.UpdateListing(&_HoraceNFTMarket.TransactOpts, nftAddress, tokenId, newPrice)
+// Solidity: function update(address nftAddress, uint256 tokenId, uint256 newPrice) returns()
+func (_HoraceNFTMarket *HoraceNFTMarketSession) Update(nftAddress common.Address, tokenId *big.Int, newPrice *big.Int) (*types.Transaction, error) {
+	return _HoraceNFTMarket.Contract.Update(&_HoraceNFTMarket.TransactOpts, nftAddress, tokenId, newPrice)
 }
 
-// UpdateListing is a paid mutator transaction binding the contract method 0xf772adf1.
+// Update is a paid mutator transaction binding the contract method 0xd09b6d43.
 //
-// Solidity: function updateListing(address nftAddress, uint256 tokenId, uint256 newPrice) returns()
-func (_HoraceNFTMarket *HoraceNFTMarketTransactorSession) UpdateListing(nftAddress common.Address, tokenId *big.Int, newPrice *big.Int) (*types.Transaction, error) {
-	return _HoraceNFTMarket.Contract.UpdateListing(&_HoraceNFTMarket.TransactOpts, nftAddress, tokenId, newPrice)
-}
-
-// WithDrawProceeds is a paid mutator transaction binding the contract method 0xc6890de5.
-//
-// Solidity: function withDrawProceeds() returns()
-func (_HoraceNFTMarket *HoraceNFTMarketTransactor) WithDrawProceeds(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _HoraceNFTMarket.contract.Transact(opts, "withDrawProceeds")
-}
-
-// WithDrawProceeds is a paid mutator transaction binding the contract method 0xc6890de5.
-//
-// Solidity: function withDrawProceeds() returns()
-func (_HoraceNFTMarket *HoraceNFTMarketSession) WithDrawProceeds() (*types.Transaction, error) {
-	return _HoraceNFTMarket.Contract.WithDrawProceeds(&_HoraceNFTMarket.TransactOpts)
-}
-
-// WithDrawProceeds is a paid mutator transaction binding the contract method 0xc6890de5.
-//
-// Solidity: function withDrawProceeds() returns()
-func (_HoraceNFTMarket *HoraceNFTMarketTransactorSession) WithDrawProceeds() (*types.Transaction, error) {
-	return _HoraceNFTMarket.Contract.WithDrawProceeds(&_HoraceNFTMarket.TransactOpts)
+// Solidity: function update(address nftAddress, uint256 tokenId, uint256 newPrice) returns()
+func (_HoraceNFTMarket *HoraceNFTMarketTransactorSession) Update(nftAddress common.Address, tokenId *big.Int, newPrice *big.Int) (*types.Transaction, error) {
+	return _HoraceNFTMarket.Contract.Update(&_HoraceNFTMarket.TransactOpts, nftAddress, tokenId, newPrice)
 }
 
 // HoraceNFTMarketBuyNFTIterator is returned from FilterBuyNFT and is used to iterate over the raw logs and unpacked data for BuyNFT events raised by the HoraceNFTMarket contract.

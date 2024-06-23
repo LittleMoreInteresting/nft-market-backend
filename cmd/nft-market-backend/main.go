@@ -4,6 +4,7 @@ import (
 	"flag"
 	"github.com/go-kratos/kratos/v2/encoding/json"
 	"google.golang.org/protobuf/encoding/protojson"
+	"nft-market-backend/pkg/eventserver"
 	"os"
 
 	"nft-market-backend/internal/conf"
@@ -37,7 +38,7 @@ func init() {
 	}
 }
 
-func newApp(logger log.Logger, hs *http.Server) *kratos.App {
+func newApp(logger log.Logger, hs *http.Server, es *eventserver.Server) *kratos.App {
 	return kratos.New(
 		kratos.ID(id),
 		kratos.Name(Name),
@@ -46,6 +47,7 @@ func newApp(logger log.Logger, hs *http.Server) *kratos.App {
 		kratos.Logger(logger),
 		kratos.Server(
 			hs,
+			es,
 		),
 	)
 }
