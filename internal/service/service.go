@@ -8,4 +8,5 @@ var ProviderSet = wire.NewSet(
 	NewNftmarketService,
 	NewERC20Event,
 	NewNFTMarketEvent,
+	NewERC721Event,
 )

@@ -6,7 +6,11 @@ import (
 	"nft-market-backend/pkg/eventserver"
 )
 
-func NewEventServer(erc20 *service.ERC20Event, nftMarket *service.NFTMarketEvent) *eventserver.Server {
+func NewEventServer(
+	erc20 *service.ERC20Event,
+	nftMarket *service.NFTMarketEvent,
+	erc721 *service.ERC721Event,
+) *eventserver.Server {
 	client, err := ethclient.Dial("wss://eth-sepolia.g.alchemy.com/v2/a93BJAOxsYWxlpZJAGq_nPYPUWDpJSsq")
 	if err != nil {
 		panic(err)
@@ -17,5 +21,6 @@ func NewEventServer(erc20 *service.ERC20Event, nftMarket *service.NFTMarketEvent
 	esrv := eventserver.NewServer(opts...)
 	esrv.Bind(erc20)
 	esrv.Bind(nftMarket)
+	esrv.Bind(erc721)
 	return esrv
 }

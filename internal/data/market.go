@@ -33,7 +33,9 @@ func (m *MarketRepo) NftListed(ctx context.Context, req *pb.ListedPageRequest) (
 	findOptions.SetSort(sort)
 
 	filter := bson.M{}
-
+	if req.MarketPlaceAddr != "" {
+		filter["marketPlaceAddress"] = req.MarketPlaceAddr
+	}
 	cursor, err := collection.Find(context.TODO(), filter, findOptions)
 	if err != nil {
 		log.Fatal(err)

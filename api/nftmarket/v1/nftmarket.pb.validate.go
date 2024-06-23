@@ -349,6 +349,8 @@ func (m *ListedPageRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	// no validation rules for MarketPlaceAddr
+
 	if len(errors) > 0 {
 		return ListedPageRequestMultiError(errors)
 	}

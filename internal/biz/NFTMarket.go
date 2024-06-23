@@ -13,15 +13,18 @@ type NFTMarketUseCase struct {
 	log    *log.Helper
 	repo   StreamRepo
 	market *contracts.HoraceNFTMarket
+	nft    *contracts.HoraceNFT
 }
 
 func NewNFTMarketUseCase(repo StreamRepo, logger log.Logger) *NFTMarketUseCase {
 	l := log.NewHelper(log.With(logger, "module", "NFTMarketUseCase"))
 	market, _ := contracts.NewHoraceNFTMarket(common.Address{}, nil)
+	nft, _ := contracts.NewHoraceNFT(common.Address{}, nil)
 	return &NFTMarketUseCase{
 		repo:   repo,
 		log:    l,
 		market: market,
+		nft:    nft,
 	}
 }
 
@@ -124,6 +127,38 @@ func (uc *NFTMarketUseCase) CancelListing(ctx context.Context, eventLog types.Lo
 		return err
 	}
 	err = uc.repo.RemoveListed(ctx, query)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (uc *NFTMarketUseCase) NftTransfer(ctx context.Context, eventLog types.Log, chainId string, NftAddress string) error {
+	transfer, err := uc.nft.ParseTransfer(eventLog)
+	if err != nil {
+		return err
+	}
+	event := &EventTransfer{
+		ChainId:    chainId,
+		From:       transfer.From.Hex(),
+		Owner:      transfer.To.Hex(),
+		NftAddress: NftAddress,
+		TokenId:    transfer.TokenId.String(),
+	}
+	query := &EventQuery{
+		ChainId:    event.ChainId,
+		NftAddress: event.NftAddress,
+		TokenId:    event.TokenId,
+	}
+
+	tr, exist, err := uc.repo.FindOneTransfer(ctx, query)
+	if err != nil {
+		return err
+	}
+	if exist {
+		event.Id = tr.Id
+	}
+	err = uc.repo.SaveNftTransfer(ctx, event)
 	if err != nil {
 		return err
 	}
