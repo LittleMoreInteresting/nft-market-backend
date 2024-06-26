@@ -18,6 +18,7 @@ func NewEventServer(
 	opts := []eventserver.ServerOption{
 		eventserver.WithClient(client),
 	}
+
 	esrv := eventserver.NewServer(opts...)
 	esrv.Bind(erc20)
 	esrv.Bind(nftMarket)
